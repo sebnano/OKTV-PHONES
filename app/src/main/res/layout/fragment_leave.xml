@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_1A"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.fragment.LeaveFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.app.oktv.custom.widget.CustomTextViewSemiBold
+                style="@style/text_20_bold"
+                android:id="@+id/tvTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/foobar"
+                android:textColor="@color/white"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginHorizontal="@dimen/_20sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_corner_15dp_black"
+                android:layout_marginHorizontal="@dimen/_44sdp"
+                android:layout_marginTop="@dimen/_42sdp"
+                android:layout_marginBottom="@dimen/_42sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTitle">
+
+                <com.app.oktv.custom.widget.CustomTextViewBold
+                    style="@style/text_20_bold"
+                    android:id="@+id/tvDialogeTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/foobar"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:lineSpacingExtra="2dp"
+                    android:layout_marginTop="@dimen/_69sdp"
+                    android:layout_marginStart="@dimen/_28sdp"
+                    android:layout_marginEnd="@dimen/_29sdp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <com.app.oktv.custom.widget.CustomTextViewSemiBold
+                    style="@style/text_14_bold"
+                    android:id="@+id/btnOk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_corner_5dp_white"
+                    android:text="@string/foobar"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/_8sdp"
+                    android:paddingBottom="@dimen/_8sdp"
+                    android:paddingStart="@dimen/_21sdp"
+                    android:paddingEnd="@dimen/_21sdp"
+                    android:textColor="@color/yellow_59"
+                    android:layout_marginTop="@dimen/_48sdp"
+                    android:layout_marginBottom="@dimen/_25sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvDialogeTitle"
+                    app:layout_constraintStart_toStartOf="@+id/tvDialogeTitle"
+                    app:layout_constraintEnd_toEndOf="@+id/tvDialogeTitle"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

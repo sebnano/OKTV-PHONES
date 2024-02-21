@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/clMenuList"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="@dimen/_213sdp"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_corner_15dp_black"
+        android:layout_marginTop="@dimen/_23sdp"
+        android:layout_marginBottom="@dimen/_18sdp"
+        android:layout_marginHorizontal="@dimen/_31sdp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.app.oktv.custom.widget.CustomTextViewSemiBold
+                    style="@style/text_20_bold"
+                    android:id="@+id/tvChannel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/foobar"
+                    android:textColor="@color/white"
+                    android:layout_marginStart="@dimen/_31sdp"
+                    android:layout_marginEnd="@dimen/_30sdp"
+                    android:layout_marginTop="@dimen/_31sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <com.app.oktv.custom.widget.CustomTextViewSemiBold
+                    style="@style/text_20_bold"
+                    android:id="@+id/tvFavourite"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/foobar"
+                    android:textColor="@color/white"
+                    android:layout_marginEnd="@dimen/_30sdp"
+                    android:layout_marginStart="@dimen/_31sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvChannel"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <com.app.oktv.custom.widget.CustomTextViewSemiBold
+                    style="@style/text_20_bold"
+                    android:id="@+id/tvGuide"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/foobar"
+                    android:textColor="@color/white"
+                    android:layout_marginEnd="@dimen/_30sdp"
+                    android:layout_marginStart="@dimen/_31sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvFavourite"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <com.app.oktv.custom.widget.CustomTextViewSemiBold
+                    style="@style/text_20_bold"
+                    android:id="@+id/tvSetting"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/foobar"
+                    android:textColor="@color/white"
+                    android:layout_marginEnd="@dimen/_30sdp"
+                    android:layout_marginStart="@dimen/_31sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvGuide"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <com.app.oktv.custom.widget.CustomTextViewSemiBold
+                    style="@style/text_20_bold"
+                    android:id="@+id/tvLeave"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/foobar"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_30sdp"
+                    android:layout_marginStart="@dimen/_31sdp"
+                    android:layout_marginBottom="@dimen/_35sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSetting"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OkTv</string>
+
+    <!-- Common -->
+    <string name="internet_not_available">Internet not available</string>
+    <string name="toast_image_intent_null">Image picker option is missing!</string>
+    <string name="something_went_wrong_">Something went wrong while processing your request</string>
+    <string name="choose_options">Choose Options</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="dialog_permission_title">Grant Permissions</string>
+    <string name="dialog_permission_message">This app needs permission to use this feature. You can grant them in app settings.</string>
+    <string name="go_to_settings">GOTO SETTINGS</string>
+
+    <!-- login activity -->
+    <string name="login">Login</string>
+    <string name="english">English</string>
+    <string name="spanish">Spanish</string>
+    <string name="enter_user_name">Enter User Name</string>
+    <string name="password">Enter Password</string>
+    <string name="leave">Leave</string>
+
+    <!-- validation -->
+    <string name="enter_r_userName">Please enter user name</string>
+    <string name="enter_r_valid_email">Please enter valid email address</string>
+    <string name="enter_r_password">Please enter password </string>
+    <string name="password_should_be_at_least_of_6_character">Password should be at least of 6 character </string>
+
+    <!-- home activity -->
+    <string name="favourite">Favourites</string>
+    <string name="guide">Guide</string>
+    <string name="settings">Settings</string>
+    <string name="netflix">Netflix</string>
+
+    <!-- home Fragment -->
+    <string name="channels">Channels</string>
+    <string name="all_the_channels">All the channels</string>
+    <string name="national">National</string>
+    <string name="films">Films</string>
+    <string name="news">News</string>
+
+    <string name="foobar">foobar</string>
+
+    <!-- setting Fragment -->
+    <string name="operators">Operators</string>
+    <string name="select_the_operators">Select the operators</string>
+    <string name="devices">Devices</string>
+    <string name="version_of_application">Version of the application : 1.2.9</string>
+    <string name="update">Update</string>
+    <string name="selected">Selected</string>
+    <string name="language">Language</string>
+
+    <!-- leave Fragment -->
+    <string name="press_ok_button_to_exist">Press OK button to exist from the app</string>
+    <string name="ok">Ok</string>
+
+</resources>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.LoginActivity"
+    android:background="@drawable/splesh">
+
+    <com.app.oktv.custom.widget.CustomTextViewBold
+        style="@style/text_20_bold"
+        android:id="@+id/tvLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login"
+        android:textColor="@color/yellow_59"
+        android:layout_marginTop="@dimen/_28sdp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clLanguage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_15sdp"
+        app:layout_constraintTop_toTopOf="@+id/tvLogin"
+        app:layout_constraintBottom_toBottomOf="@id/tvLogin"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.app.oktv.custom.widget.CustomTextViewMedium
+            style="@style/text_14_lite"
+            android:id="@+id/tvLanguageName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/yellow_59"
+            android:text="@string/english"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <com.app.oktv.custom.widget.CustomImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_4sdp"
+            android:layout_marginBottom="@dimen/_2sdp"
+            android:src="@drawable/ic_down_arrow_yellow"
+            app:layout_constraintTop_toTopOf="@+id/tvLanguageName"
+            app:layout_constraintStart_toEndOf="@id/tvLanguageName"
+            app:layout_constraintBottom_toBottomOf="@+id/tvLanguageName"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_82sdp"
+        app:layout_constraintTop_toBottomOf="@+id/tvLogin"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:background="@drawable/bg_corner_8dp_white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.app.oktv.custom.widget.CustomImageView
+                android:id="@+id/ivUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_users_blue"
+                android:layout_margin="@dimen/_13sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="1dp"
+                android:layout_height="51dp"
+                android:layout_marginStart="@dimen/_13sdp"
+                android:background="@color/blue_ff"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivUserName"/>
+            
+            <com.app.oktv.custom.widget.CustomEditText
+                style="@style/text_16_lite"
+                android:id="@+id/etUserName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_user_name"
+                android:paddingTop="@dimen/_2sdp"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/bg_corner_8dp_white"
+                android:textColorHint="@color/white_gray"
+                android:layout_marginHorizontal="@dimen/_12sdp"
+                android:layout_marginVertical="@dimen/_10sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/view1"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:background="@drawable/bg_corner_8dp_white"
+            app:layout_constraintTop_toBottomOf="@+id/clUserName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.app.oktv.custom.widget.CustomImageView
+                android:id="@+id/ivPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_lock_blue"
+                android:layout_margin="@dimen/_13sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="1dp"
+                android:layout_height="51dp"
+                android:layout_marginStart="@dimen/_13sdp"
+                android:background="@color/blue_ff"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivPassword"/>
+
+            <com.app.oktv.custom.widget.CustomEditText
+                style="@style/text_16_lite"
+                android:id="@+id/etPassword"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                android:paddingTop="@dimen/_2sdp"
+                android:inputType="textPassword"
+                android:background="@drawable/bg_corner_8dp_white"
+                android:textColorHint="@color/white_gray"
+                android:layout_marginHorizontal="@dimen/_12sdp"
+                android:layout_marginVertical="@dimen/_10sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/view2"
+                app:layout_constraintEnd_toStartOf="@+id/ivEye"/>
+
+            <com.app.oktv.custom.widget.CustomImageView
+                android:id="@+id/ivEye"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_eye_close"
+                android:paddingHorizontal="@dimen/_13sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.app.oktv.custom.widget.CustomTextViewMedium
+            style="@style/text_16_lite"
+            android:id="@+id/btnLogin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_corner_8dp_blue"
+            android:text="@string/login"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:paddingVertical="@dimen/_8sdp"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            app:layout_constraintTop_toBottomOf="@+id/clPassword"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <com.app.oktv.custom.widget.CustomTextViewMedium
+            style="@style/text_16_lite"
+            android:id="@+id/btnLeave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_corner_8dp_yellow"
+            android:text="@string/leave"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:paddingVertical="@dimen/_8sdp"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            app:layout_constraintTop_toBottomOf="@+id/btnLogin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

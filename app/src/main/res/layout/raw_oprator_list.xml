@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clMain"
+        android:layout_width="@dimen/_135sdp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:minHeight="@dimen/_23sdp"
+        android:background="@drawable/bg_corner_5dp_black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.app.oktv.custom.widget.CustomTextViewMedium
+            style="@style/text_12_lite"
+            android:id="@+id/tvOperatorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/foobar"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:layout_marginHorizontal="@dimen/_11sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:textColor="@color/yellow_59"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <com.app.oktv.custom.widget.CustomTextViewMedium
+            style="@style/text_8_lite"
+            android:id="@+id/tvOperatorSelected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/yellow_59"
+            android:text="@string/foobar"
+            android:visibility="gone"
+            android:layout_marginHorizontal="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_3sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tvOperatorName"
+            app:layout_constraintTop_toBottomOf="@+id/tvOperatorName"
+            app:layout_constraintStart_toStartOf="@+id/tvOperatorName"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
