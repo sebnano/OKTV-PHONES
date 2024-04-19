@@ -19,8 +19,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/programguide_channel_container"
-    android:layout_width="50dp"
-    android:layout_height="50dp"
+    android:layout_width="80dp"
+    android:layout_height="wrap_content"
     android:background="#00000000">
 
     <TextView
@@ -33,10 +33,13 @@
 
     <ImageView
         android:id="@+id/programguide_channel_logo"
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_gravity="center"
-        android:background="#1A1A1A"
+        android:background="#FFFF"
+        android:scaleType="fitXY"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
         android:contentDescription="@string/programguide_content_description_channel_logo"
         android:visibility="gone"
         tools:visibility="visible" />

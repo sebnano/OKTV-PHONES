@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <com.app.oktv.custom.widget.CustomTextViewMedium
+        <com.oktv_mobile.custom.widget.CustomTextViewMedium
             style="@style/text_12_lite"
             android:id="@+id/tvOperatorName"
             android:layout_width="wrap_content"
@@ -32,13 +32,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <com.app.oktv.custom.widget.CustomTextViewMedium
+        <com.oktv_mobile.custom.widget.CustomTextViewMedium
             style="@style/text_8_lite"
             android:id="@+id/tvOperatorSelected"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/yellow_59"
-            android:text="@string/foobar"
             android:visibility="gone"
             android:layout_marginHorizontal="@dimen/_5sdp"
             android:layout_marginBottom="@dimen/_3sdp"

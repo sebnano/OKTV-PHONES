@@ -112,11 +112,11 @@ class ProgramGuideGridView<T>(context: Context, attrs: AttributeSet?, defStyle: 
             if (ProgramGuideUtil.isDescendant(this@ProgramGuideGridView, newFocus)) {
                 lastFocusedView = newFocus
                 if (newFocus is ProgramGuideItemView<*> && (correctScheduleView == null || correctScheduleView == newFocus)) {
-                    scheduleSelectionListener?.onSelectionChanged(newFocus.schedule as ProgramGuideSchedule<T>?)
+//                    scheduleSelectionListener?.onEPGSelectionChanged(newFocus.schedule as ProgramGuideSchedule<T>?)
                 }
                 correctScheduleView = null
             } else {
-                scheduleSelectionListener?.onSelectionChanged(null)
+//                scheduleSelectionListener?.onEPGSelectionChanged(null)
             }
         }
 
@@ -321,29 +321,30 @@ class ProgramGuideGridView<T>(context: Context, attrs: AttributeSet?, defStyle: 
         return internalKeepCurrentProgramFocused
     }
 
-    override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
-        // It is required to properly handle OnRepeatedKeyInterceptListener. If the focused
-        // item's are at the almost end of screen, focus change to the next item doesn't work.
-        // It restricts that a focus item's position cannot be too far from the desired position.
-        val focusedView = findFocus()
-        if (focusedView != null && onRepeatedKeyInterceptListener.isFocusAccelerated) {
-            val location = IntArray(2)
-            getLocationOnScreen(location)
-            val focusedLocation = IntArray(2)
-            focusedView.getLocationOnScreen(focusedLocation)
-            val y = focusedLocation[1] - location[1]
-
-            val minY = (selectionRow - 1) * rowHeight
-            if (y < minY) {
-                scrollBy(0, y - minY)
-            }
-
-            val maxY = (selectionRow + 1) * rowHeight
-            if (y > maxY) {
-                scrollBy(0, y - maxY)
-            }
-        }
-    }
+//    override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
+//        // It is required to properly handle OnRepeatedKeyInterceptListener. If the focused
+//        // item's are at the almost end of screen, focus change to the next item doesn't work.
+//        // It restricts that a focus item's position cannot be too far from the desired position.
+//        val focusedView = findFocus()
+//        if (focusedView != null && onRepeatedKeyInterceptListener.isFocusAccelerated) {
+//            val location = IntArray(2)
+//            getLocationOnScreen(location)
+//            val focusedLocation = IntArray(2)
+//            focusedView.getLocationOnScreen(focusedLocation)
+//            val y = focusedLocation[1] - location[1]
+//
+//            val minY = (selectionRow - 1) * rowHeight
+//            if (y < minY) {
+//                scrollBy(0, y - minY)
+//            }
+//
+//            val maxY = (selectionRow + 1) * rowHeight
+//            if (y > maxY) {
+//                scrollBy(0, y - maxY)
+//            }
+//        }
+////        Log.i("HorizontalScroll", "scroll x - ${scrollX}")
+//    }
 
     /**
      * Intercept the channel up / down keys to navigate with them, if this feature is enabled.

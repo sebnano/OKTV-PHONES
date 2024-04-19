@@ -7,7 +7,7 @@
     android:background="@drawable/splesh"
     tools:context=".ui.activity.SplashActivity">
 
-    <com.app.oktv.custom.widget.CustomImageView
+    <com.oktv_mobile.custom.widget.CustomImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"

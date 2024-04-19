@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    app:cardCornerRadius="@dimen/_15sdp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.oktv_mobile.custom.widget.CustomTextViewMedium
+            style="@style/text_16_bold"
+            android:id="@+id/tvPinTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tool:text="Set pin for see a protected channel"
+            android:layout_marginTop="@dimen/_25sdp"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+       <androidx.constraintlayout.widget.ConstraintLayout
+           android:id="@+id/clPinPassword"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="@dimen/_15sdp"
+           android:layout_marginStart="@dimen/_25sdp"
+           android:layout_marginEnd="@dimen/_25sdp"
+           android:background="@drawable/bg_corner_15dp_blue_border"
+           app:layout_constraintTop_toBottomOf="@+id/tvPinTitle"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintEnd_toEndOf="parent">
+
+           <com.oktv_mobile.custom.widget.CustomEditText
+               style="@style/text_16_bold"
+               android:id="@+id/etPinPassword"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:maxLength="4"
+               android:paddingTop="@dimen/_2sdp"
+               android:paddingBottom="@dimen/_2sdp"
+               android:inputType="textPassword"
+               tool:hint="enter pin"
+               android:background="@drawable/bg_corner_8dp_white"
+               android:textColorHint="@color/white_gray"
+               android:layout_marginStart="@dimen/_15sdp"
+               android:layout_marginEnd="@dimen/_35sdp"
+               android:layout_marginTop="@dimen/_5sdp"
+               android:layout_marginBottom="@dimen/_5sdp"
+               app:layout_constraintBottom_toBottomOf="parent"
+               app:layout_constraintTop_toTopOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"/>
+
+           <com.oktv_mobile.custom.widget.CustomImageView
+               android:id="@+id/ivEye"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:src="@drawable/ic_eye_close"
+               android:paddingHorizontal="@dimen/_13sdp"
+               app:layout_constraintTop_toTopOf="parent"
+               app:layout_constraintBottom_toBottomOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"/>
+
+       </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clToolTip"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/clPinPassword"
+            app:layout_constraintStart_toStartOf="@+id/tvPinTitle"
+            app:layout_constraintEnd_toEndOf="@+id/tvPinTitle">
+
+            <com.oktv_mobile.custom.widget.CustomImageView
+                android:id="@+id/ivToolTip"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:src="@drawable/ic_tool_tip"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginStart="@dimen/_15sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <com.oktv_mobile.custom.widget.CustomTextViewMedium
+                style="@style/text_12_lite"
+                android:id="@+id/tvTip"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:text="This pin use for a see our protected channal live telecast,This Pin is Only one time set if you forgot your pin then re-install our app "
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivToolTip"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/black_1A"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            app:layout_constraintTop_toBottomOf="@+id/clToolTip"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+            <com.oktv_mobile.custom.widget.CustomTextViewMedium
+                style="@style/text_16_bold"
+                android:id="@+id/tvSetPin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:text="Set"
+                android:textColor="@color/blue_ff"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                app:layout_constraintTop_toBottomOf="@+id/view1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

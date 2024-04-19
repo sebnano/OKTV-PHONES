@@ -16,6 +16,9 @@
     <string name="login">Login</string>
     <string name="english">English</string>
     <string name="spanish">Spanish</string>
+    <string name="es">es</string>
+    <string name="en_gb">en-gb</string>
+
     <string name="enter_user_name">Enter User Name</string>
     <string name="password">Enter Password</string>
     <string name="leave">Leave</string>
@@ -45,6 +48,7 @@
     <string name="operators">Operators</string>
     <string name="select_the_operators">Select the operators</string>
     <string name="devices">Devices</string>
+    <string name="devices_connected">3/10</string>
     <string name="version_of_application">Version of the application : 1.2.9</string>
     <string name="update">Update</string>
     <string name="selected">Selected</string>
@@ -54,5 +58,4 @@
     <string name="press_ok_button_to_exist">Press OK button to exist from the app</string>
     <string name="ok">Ok</string>
     <string name="upcoming_shows">Upcoming Shows</string>
-
 </resources>

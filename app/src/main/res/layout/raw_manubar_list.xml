@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.app.oktv.custom.widget.CustomTextViewSemiBold
+                <com.oktv_mobile.custom.widget.CustomTextViewSemiBold
                     style="@style/text_20_bold"
                     android:id="@+id/tvChannel"
                     android:layout_width="0dp"
@@ -42,7 +42,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <com.app.oktv.custom.widget.CustomTextViewSemiBold
+                <com.oktv_mobile.custom.widget.CustomTextViewSemiBold
                     style="@style/text_20_bold"
                     android:id="@+id/tvFavourite"
                     android:layout_width="0dp"
@@ -56,7 +56,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/tvChannel"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <com.app.oktv.custom.widget.CustomTextViewSemiBold
+                <com.oktv_mobile.custom.widget.CustomTextViewSemiBold
                     style="@style/text_20_bold"
                     android:id="@+id/tvGuide"
                     android:layout_width="0dp"
@@ -70,7 +70,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/tvFavourite"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <com.app.oktv.custom.widget.CustomTextViewSemiBold
+                <com.oktv_mobile.custom.widget.CustomTextViewSemiBold
                     style="@style/text_20_bold"
                     android:id="@+id/tvSetting"
                     android:layout_width="0dp"
@@ -84,7 +84,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/tvGuide"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <com.app.oktv.custom.widget.CustomTextViewSemiBold
+                <com.oktv_mobile.custom.widget.CustomTextViewSemiBold
                     style="@style/text_20_bold"
                     android:id="@+id/tvLeave"
                     android:layout_width="0dp"
@@ -96,8 +96,23 @@
                     android:layout_marginStart="@dimen/_31sdp"
                     android:layout_marginBottom="@dimen/_35sdp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvSetting"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <com.oktv_mobile.custom.widget.CustomTextViewSemiBold
+                    style="@style/text_20_bold"
+                    android:id="@+id/tvExit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Exit"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_30sdp"
+                    android:layout_marginStart="@dimen/_31sdp"
+                    android:layout_marginBottom="@dimen/_35sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvLeave"
                     app:layout_constraintStart_toStartOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

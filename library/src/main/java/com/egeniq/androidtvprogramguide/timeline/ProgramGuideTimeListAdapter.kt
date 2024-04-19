@@ -27,6 +27,8 @@ import com.egeniq.androidtvprogramguide.util.ProgramGuideUtil
 import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
@@ -77,9 +79,11 @@ class ProgramGuideTimeListAdapter(
         val endTime = startTime + TIME_UNIT_MS
 
         val itemView = holder.itemView
-        val timeDate = Instant.ofEpochMilli(startTime).atZone(displayTimezone)
-        val timeString = TIME_FORMATTER.format(timeDate)
-        (itemView as TextView).text = timeString
+
+        val dateFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        val formattedDate = dateFormat.format(Date(startTime))
+
+        (itemView as TextView).text = formattedDate
 
         val lp = itemView.layoutParams as RecyclerView.LayoutParams
         lp.width = ProgramGuideUtil.convertMillisToPixel(startTime, endTime)

@@ -16,6 +16,7 @@
 
 package com.egeniq.androidtvprogramguide
 
+import com.egeniq.androidtvprogramguide.entity.ProgramGuideChannel
 import com.egeniq.androidtvprogramguide.entity.ProgramGuideSchedule
 
 interface ProgramGuideHolder<T> {
@@ -24,6 +25,8 @@ interface ProgramGuideHolder<T> {
 
     fun getTimelineRowScrollOffset(): Int
     fun onScheduleClickedInternal(schedule: ProgramGuideSchedule<T>)
+    fun onChannelLogoClicked(channel: ProgramGuideChannel)
+    fun onRowHorizontalScrolled(dx: Int)
 
     val DISPLAY_SHOW_PROGRESS: Boolean
 }

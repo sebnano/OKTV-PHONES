@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.app.oktv.custom.widget.CustomImageView
+            <com.oktv_mobile.custom.widget.CustomImageView
                 android:id="@+id/ivChannelImage"
                 android:layout_width="@dimen/_77sdp"
                 android:layout_height="@dimen/_77sdp"

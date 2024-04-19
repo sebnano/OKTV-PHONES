@@ -19,8 +19,11 @@ package com.egeniq.androidtvprogramguide.row
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
+import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.egeniq.androidtvprogramguide.ProgramGuideHolder
 import com.egeniq.androidtvprogramguide.ProgramGuideManager
@@ -53,6 +56,10 @@ class ProgramGuideRowGridView @JvmOverloads constructor(
     private val minimumStickOutWidth =
         resources.getDimensionPixelOffset(R.dimen.programguide_minimum_item_width_sticking_out_behind_channel_column)
 
+    private var lastX: Float = 0f
+    private var lastY: Float = 0f
+    private var deltaY: Float = 0f
+
     private val layoutListener = object : OnGlobalLayoutListener {
         override fun onGlobalLayout() {
             viewTreeObserver.removeOnGlobalLayoutListener(this)
@@ -68,12 +75,12 @@ class ProgramGuideRowGridView @JvmOverloads constructor(
         }
     }
 
-    override fun onScrolled(dx: Int, dy: Int) {
-        // Remove callback to prevent updateChildVisibleArea being called twice.
-        viewTreeObserver.removeOnGlobalLayoutListener(layoutListener)
-        super.onScrolled(dx, dy)
-        updateChildVisibleArea()
-    }
+//    override fun onScrolled(dx: Int, dy: Int) {
+//        // Remove callback to prevent updateChildVisibleArea being called twice.
+//        viewTreeObserver.removeOnGlobalLayoutListener(layoutListener)
+//        super.onScrolled(dx, dy)
+//        updateChildVisibleArea()
+//    }
 
     // Call this API after RTL is resolved. (i.e. View is measured.)
     private fun isDirectionStart(direction: Int): Boolean {
@@ -319,4 +326,10 @@ class ProgramGuideRowGridView @JvmOverloads constructor(
             }
         }
     }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        // Prevent touch events from being dispatched to GridView
+        return false
+    }
+
 }

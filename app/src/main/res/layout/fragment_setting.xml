@@ -20,7 +20,7 @@
            android:layout_width="match_parent"
            android:layout_height="match_parent">
 
-           <com.app.oktv.custom.widget.CustomTextViewSemiBold
+           <com.oktv_mobile.custom.widget.CustomTextViewSemiBold
                style="@style/text_20_bold"
                android:id="@+id/tvSettingTitle"
                android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                app:layout_constraintTop_toBottomOf="@+id/tvSettingTitle"
                app:layout_constraintStart_toStartOf="@+id/tvSettingTitle">
 
-               <com.app.oktv.custom.widget.CustomTextViewSemiBold
+               <com.oktv_mobile.custom.widget.CustomTextViewSemiBold
                    style="@style/text_16_bold"
                    android:id="@+id/tvOperatorTitle"
                    android:layout_width="match_parent"
@@ -53,7 +53,7 @@
                    app:layout_constraintTop_toTopOf="parent"
                    app:layout_constraintStart_toStartOf="parent"/>
 
-               <com.app.oktv.custom.widget.CustomTextViewMedium
+               <com.oktv_mobile.custom.widget.CustomTextViewMedium
                    style="@style/text_14_lite"
                    android:id="@+id/tvSelectOperator"
                    android:layout_width="match_parent"
@@ -70,7 +70,9 @@
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:overScrollMode="never"
+                   app:spanCount="2"
                    tools:listitem="@layout/raw_oprator_list"
+                   app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                    android:layout_marginTop="@dimen/_8sdp"
                    app:layout_constraintTop_toBottomOf="@+id/tvSelectOperator"/>
 
@@ -84,7 +86,7 @@
                app:layout_constraintTop_toBottomOf="@+id/clOperator"
                app:layout_constraintStart_toStartOf="@+id/clOperator">
 
-               <com.app.oktv.custom.widget.CustomTextViewSemiBold
+               <com.oktv_mobile.custom.widget.CustomTextViewSemiBold
                    style="@style/text_16_bold"
                    android:id="@+id/tvDeviceTitle"
                    android:layout_width="wrap_content"
@@ -95,12 +97,13 @@
                    app:layout_constraintTop_toTopOf="parent"
                    app:layout_constraintStart_toStartOf="parent"/>
 
-               <com.app.oktv.custom.widget.CustomTextViewSemiBold
+               <com.oktv_mobile.custom.widget.CustomTextViewSemiBold
                    style="@style/text_16_bold"
                    android:id="@+id/tvDeviceCount"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text=" 3/10"
+                   tools:text="3/10"
+                   android:layout_marginStart="@dimen/_7sdp"
                    android:layout_marginTop="@dimen/_16sdp"
                    android:textColor="@color/white"
                    app:layout_constraintTop_toTopOf="parent"
@@ -126,7 +129,7 @@
                app:layout_constraintTop_toBottomOf="@+id/clDevice"
                app:layout_constraintStart_toStartOf="@+id/clDevice">
 
-               <com.app.oktv.custom.widget.CustomTextViewSemiBold
+               <com.oktv_mobile.custom.widget.CustomTextViewSemiBold
                    style="@style/text_16_bold"
                    android:id="@+id/tvLanguageTitle"
                    android:layout_width="wrap_content"
@@ -150,7 +153,7 @@
                    app:layout_constraintTop_toBottomOf="@+id/tvLanguageTitle"
                    app:layout_constraintStart_toStartOf="@+id/tvLanguageTitle">
 
-                   <com.app.oktv.custom.widget.CustomTextViewSemiBold
+                   <com.oktv_mobile.custom.widget.CustomTextViewSemiBold
                        style="@style/text_14_bold"
                        android:id="@+id/tvLanguageName"
                        android:layout_width="wrap_content"
@@ -163,7 +166,7 @@
                        app:layout_constraintStart_toStartOf="parent"
                        app:layout_constraintBottom_toBottomOf="parent"/>
 
-                   <com.app.oktv.custom.widget.CustomImageView
+                   <com.oktv_mobile.custom.widget.CustomImageView
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
                        android:src="@drawable/ic_down_arrow_yellow"
@@ -177,25 +180,42 @@
 
            </androidx.constraintlayout.widget.ConstraintLayout>
 
+           <com.oktv_mobile.custom.widget.CustomTextViewSemiBold
+               style="@style/text_14_bold"
+               android:id="@+id/btnSetPin"
+               android:layout_width="@dimen/_135sdp"
+               android:layout_height="wrap_content"
+               android:background="@drawable/bg_corner_5dp_black"
+               android:layout_marginTop="@dimen/_16sdp"
+               android:layout_marginBottom="@dimen/_58sdp"
+               android:paddingHorizontal="@dimen/_7sdp"
+               android:paddingVertical="@dimen/_4sdp"
+               android:gravity="center"
+               android:textColor="@color/yellow_59"
+               app:layout_constraintTop_toBottomOf="@+id/clLanguage"
+               app:layout_constraintStart_toStartOf="@+id/clLanguage"/>
+
            <androidx.constraintlayout.widget.ConstraintLayout
                android:layout_width="0dp"
                android:layout_height="wrap_content"
                app:layout_constraintEnd_toEndOf="parent"
-               app:layout_constraintTop_toBottomOf="@+id/clLanguage"
-               app:layout_constraintStart_toStartOf="@+id/clLanguage">
+               app:layout_constraintTop_toBottomOf="@+id/btnSetPin"
+               app:layout_constraintStart_toStartOf="@+id/btnSetPin">
 
-               <com.app.oktv.custom.widget.CustomTextViewSemiBold
+               <com.oktv_mobile.custom.widget.CustomTextViewSemiBold
                    style="@style/text_16_bold"
                    android:id="@+id/tvVersionTitle"
-                   android:layout_width="wrap_content"
+                   android:layout_width="0dp"
                    android:layout_height="wrap_content"
                    android:text="@string/foobar"
                    android:layout_marginTop="@dimen/_16sdp"
+                   android:layout_marginEnd="@dimen/_11sdp"
                    android:textColor="@color/white"
+                   app:layout_constraintEnd_toEndOf="parent"
                    app:layout_constraintTop_toTopOf="parent"
                    app:layout_constraintStart_toStartOf="parent"/>
 
-               <com.app.oktv.custom.widget.CustomTextViewSemiBold
+               <com.oktv_mobile.custom.widget.CustomTextViewSemiBold
                    style="@style/text_14_bold"
                    android:id="@+id/btnUpdate"
                    android:layout_width="@dimen/_135sdp"

@@ -9,31 +9,34 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clChannelName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15sdp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <com.app.oktv.custom.widget.CustomTextViewMedium
+            <com.oktv_mobile.custom.widget.CustomTextViewMedium
                 style="@style/text_16_lite"
-                android:id="@+id/tvAllChannel"
-                android:layout_width="wrap_content"
+                android:id="@+id/tvChannelName"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:text="@string/foobar"
+                android:textAlignment="textStart"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ivArrowAllChannel"/>
 
-            <com.app.oktv.custom.widget.CustomImageView
+            <com.oktv_mobile.custom.widget.CustomImageView
                 android:id="@+id/ivArrowAllChannel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_arrow_right_yellow"
                 android:layout_marginStart="@dimen/_8sdp"
-                app:layout_constraintTop_toTopOf="@+id/tvAllChannel"
-                app:layout_constraintBottom_toBottomOf="@+id/tvAllChannel"
-                app:layout_constraintStart_toEndOf="@+id/tvAllChannel"/>
+                app:layout_constraintTop_toTopOf="@+id/tvChannelName"
+                app:layout_constraintBottom_toBottomOf="@+id/tvChannelName"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

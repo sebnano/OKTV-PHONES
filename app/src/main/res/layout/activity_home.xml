@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.HomeActivity"
+    tools:context="com.oktv_mobile.ui.activity.HomeActivity"
     android:id="@+id/clMain">
     
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:overScrollMode="never"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,7 +57,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/vpBanner">
 
-                        <com.app.oktv.custom.widget.CustomImageView
+                        <com.oktv_mobile.custom.widget.CustomImageView
                             android:id="@+id/ivMenuBar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -85,6 +86,7 @@
                     android:id="@+id/flFragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/_20sdp"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
@@ -98,7 +100,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <com.app.oktv.custom.widget.CustomTextViewSemiBold
+        <com.oktv_mobile.custom.widget.CustomTextViewSemiBold
             style="@style/text_20_bold"
             android:id="@+id/tvChannelName"
             android:layout_width="wrap_content"
@@ -112,7 +114,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
-        <com.app.oktv.custom.widget.CustomImageView
+        <com.oktv_mobile.custom.widget.CustomImageView
+            android:id="@+id/okTvLogo"
             android:layout_width="@dimen/_58sdp"
             android:layout_height="@dimen/_25sdp"
             android:src="@drawable/ic_ok_tv_logo"

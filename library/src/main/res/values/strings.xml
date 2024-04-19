@@ -22,6 +22,12 @@
     <string name="programguide_day_yesterday">Yesterday</string>
     <string name="programguide_day_today">Today</string>
     <string name="programguide_day_tomorrow">Tomorrow</string>
+    <string name="programguide_day_all">All</string>
+
+    <string name="programguide_day_yesterday_spanish">Ayer</string>
+    <string name="programguide_day_today_spanish">Hoy</string>
+    <string name="programguide_day_tomorrow_spanish">Mañana</string>
+    <string name="programguide_day_All_spanish">Todos</string>
 
     <string name="programguide_part_of_day_morning">Morning</string>
     <string name="programguide_part_of_day_afternoon">Afternoon</string>

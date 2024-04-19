@@ -51,19 +51,20 @@ class EpgFragment : ProgramGuideFragment<EpgFragment.SimpleProgram>() {
     )
 
     override fun onScheduleClicked(programGuideSchedule: ProgramGuideSchedule<SimpleProgram>) {
-        val innerSchedule = programGuideSchedule.program
-        if (innerSchedule == null) {
-            // If this happens, then our data source gives partial info
-            Log.w(TAG, "Unable to open schedule!")
-            return
-        }
-        if (programGuideSchedule.isCurrentProgram) {
-            Toast.makeText(context, "Open live player", Toast.LENGTH_LONG).show()
-        } else {
-            Toast.makeText(context, "Open detail page", Toast.LENGTH_LONG).show()
-        }
-        // Example of how a program can be updated. You could also change the underlying program.
-        updateProgram(programGuideSchedule.copy(displayTitle = programGuideSchedule.displayTitle + " [clicked]"))
+        onScheduleSelected(programGuideSchedule)
+//        val innerSchedule = programGuideSchedule.program
+//        if (innerSchedule == null) {
+//            // If this happens, then our data source gives partial info
+//            Log.w(TAG, "Unable to open schedule!")
+//            return
+//        }
+//        if (programGuideSchedule.isCurrentProgram) {
+//            Toast.makeText(context, "Open live player", Toast.LENGTH_LONG).show()
+//        } else {
+//            Toast.makeText(context, "Open detail page", Toast.LENGTH_LONG).show()
+//        }
+//        // Example of how a program can be updated. You could also change the underlying program.
+//        updateProgram(programGuideSchedule.copy(displayTitle = programGuideSchedule.displayTitle + " [clicked]"))
     }
 
     override fun onScheduleSelected(programGuideSchedule: ProgramGuideSchedule<SimpleProgram>?) {
@@ -252,7 +253,7 @@ class EpgFragment : ProgramGuideFragment<EpgFragment.SimpleProgram>() {
 
     override fun requestRefresh() {
         // You can refresh other data here as well.
-        requestingProgramGuideFor(currentDate)
+//        requestingProgramGuideFor(currentDate)
     }
 
 }

@@ -46,12 +46,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/programguide_time_row" />
+        app:layout_constraintTop_toBottomOf="@id/clProgramguide_time_row" />
+
+    <ScrollView
+        android:id="@+id/horizontalScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clProgramguide_time_row">
 
     <ViewAnimator
         android:id="@+id/programguide_content_animator"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:inAnimation="@android:anim/fade_in"
         android:outAnimation="@android:anim/fade_out"
         android:background="#1A1A1A"
@@ -76,13 +86,18 @@
             android:layout_gravity="center"
             android:text="@string/programguide_error_fetching_content" />
 
-        <!-- Data state -->
-        <com.egeniq.androidtvprogramguide.ProgramGuideGridView
-            android:id="@+id/programguide_grid"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            <!-- Data state -->
+            <com.egeniq.androidtvprogramguide.ProgramGuideGridView
+                android:id="@+id/programguide_grid"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:scrollbars="none"/>
+
 
     </ViewAnimator>
+
+    </ScrollView>
 
     <Space
         android:id="@+id/left_channel_guideline"
@@ -91,41 +106,87 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <com.egeniq.androidtvprogramguide.timeline.ProgramGuideTimelineRow
-        android:id="@+id/programguide_time_row"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clProgramguide_time_row"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/programguide_time_row_height"
-        android:layout_marginTop="60dp"
-        android:alpha="0"
         android:background="#FFDE59"
-        android:layout_marginStart="-5dp"
-        android:fadingEdgeLength="20dp"
-        android:requiresFadingEdge="horizontal"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/programguide_timeline_row_negative_margin"
-        app:layout_constraintTop_toTopOf="@id/programguide_top_margin"
-        tools:alpha="1"
-        tools:listitem="@layout/programguide_item_time" />
+        app:layout_constraintTop_toTopOf="@id/programguide_top_margin">
+
+        <ImageView
+            android:id="@+id/ivLeft"
+            android:layout_width="@dimen/programguide_time_row_height"
+            android:layout_height="@dimen/programguide_time_row_height"
+            android:src="@drawable/ic_left_arrow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <com.egeniq.androidtvprogramguide.timeline.ProgramGuideTimelineRow
+            android:id="@+id/programguide_time_row"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/programguide_time_row_height"
+            android:alpha="0"
+            android:background="#FFDE59"
+            android:fadingEdgeLength="20dp"
+            android:requiresFadingEdge="horizontal"
+            android:layout_marginStart="120dp"
+            android:layout_marginEnd="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:alpha="1"
+            tools:listitem="@layout/programguide_item_time" />
+
+        <ImageView
+            android:id="@+id/ivRight"
+            android:layout_width="@dimen/programguide_time_row_height"
+            android:layout_height="@dimen/programguide_time_row_height"
+            android:src="@drawable/ic_right_arrow"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
 
     <include
         android:id="@+id/programguide_day_filter"
         layout="@layout/programguide_item_filter"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_marginStart="@dimen/programguide_page_left_padding"
-        app:layout_constraintBottom_toTopOf="@id/programguide_time_row"
+        app:layout_constraintBottom_toTopOf="@id/clProgramguide_time_row"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/programguide_top_margin" />
+
+    <ImageView
+        android:id="@+id/ivRefresh"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_refresh"
+        android:visibility="gone"
+        android:layout_marginEnd="@dimen/programguide_page_right_padding"
+        app:layout_constraintBottom_toTopOf="@id/clProgramguide_time_row"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/programguide_top_margin" />
 
     <include
         android:id="@+id/programguide_current_date"
         layout="@layout/programguide_item_time"
         android:layout_width="wrap_content"
+        android:visibility="gone"
         android:layout_height="@dimen/programguide_time_row_height"
         android:layout_marginStart="@dimen/programguide_page_left_padding"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/programguide_time_row" />
+        app:layout_constraintTop_toTopOf="@id/clProgramguide_time_row" />
 
     <include
         android:id="@+id/programguide_current_time_indicator"

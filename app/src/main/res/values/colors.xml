@@ -21,4 +21,7 @@
     <!-- Color black -->
     <color name="black_1A">#1A1A1A</color>
 
+    <!-- Color black -->
+    <color name="red_14">#E31414</color>
+
 </resources>

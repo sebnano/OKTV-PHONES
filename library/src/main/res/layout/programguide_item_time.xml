@@ -19,5 +19,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/ProgramGuide.Text.Time"
     android:textColor="@color/programguide_channel_item_background_color_default"
-    tools:background="#FFDE59 "
+    android:textStyle="bold"
+    tools:background="#FFDE59"
     tools:text="8:00" />

@@ -18,18 +18,19 @@ package com.egeniq.androidtvprogramguide.row
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
+import android.widget.GridView
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.egeniq.androidtvprogramguide.ProgramGuideHolder
-import com.egeniq.androidtvprogramguide.ProgramGuideListAdapter
-import com.egeniq.androidtvprogramguide.ProgramGuideManager
-import com.egeniq.androidtvprogramguide.R
+import com.egeniq.androidtvprogramguide.*
 import com.egeniq.androidtvprogramguide.entity.ProgramGuideChannel
 import com.egeniq.androidtvprogramguide.entity.ProgramGuideSchedule
 import java.util.*
@@ -91,6 +92,7 @@ internal class ProgramGuideRowAdapter(
         return R.layout.programguide_item_row
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onBindViewHolder(holder: ProgramRowViewHolder, position: Int) {
         holder.onBind(position, programManager, programListAdapters, programGuideHolder)
     }
@@ -114,33 +116,43 @@ internal class ProgramGuideRowAdapter(
     internal class ProgramRowViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val container: ViewGroup = itemView as ViewGroup
+//        val touchInterceptLayout : TouchInterceptLayout = container.findViewById(R.id.touch_intercept_layout)
         private val rowGridView: ProgramGuideRowGridView = container.findViewById(R.id.row)
 
         private val channelNameView: TextView = container.findViewById(R.id.programguide_channel_name)
         private val channelLogoView: ImageView = container.findViewById(R.id.programguide_channel_logo)
 
         init {
-            val channelContainer =
-                container.findViewById<ViewGroup>(R.id.programguide_channel_container)
+            val channelContainer = container.findViewById<ViewGroup>(R.id.programguide_channel_container)
             channelContainer.viewTreeObserver.addOnGlobalFocusChangeListener { _, _ ->
                 channelContainer.isActivated = rowGridView.hasFocus()
             }
         }
 
+        @RequiresApi(Build.VERSION_CODES.M)
         fun onBind(
             position: Int,
             programManager: ProgramGuideManager<*>,
             programListAdapters: List<RecyclerView.Adapter<*>>,
             programGuideHolder: ProgramGuideHolder<*>
         ) {
-            onBindChannel(programManager.getChannel(position))
+            onBindChannel(programGuideHolder, programManager.getChannel(position))
             rowGridView.swapAdapter(programListAdapters[position], true)
             rowGridView.setProgramGuideFragment(programGuideHolder)
             rowGridView.setChannel(programManager.getChannel(position)!!)
-            rowGridView.resetScroll(programGuideHolder.getTimelineRowScrollOffset())
+            rowGridView.stopScroll()
+
+            rowGridView.setOnScrollChangeListener { view, scrollX, scrollY, oldScrollX, oldScrollY ->
+                val dy = scrollX - oldScrollX
+                programGuideHolder.onRowHorizontalScrolled(dy)
+            }
+
+//            touchInterceptLayout.setProgramGuideGridView(rowGridView)
+//            rowGridView.resetScroll(programGuideHolder.getTimelineRowScrollOffset())
         }
 
-        private fun onBindChannel(channel: ProgramGuideChannel?) {
+        private fun onBindChannel(
+            programGuideHolder: ProgramGuideHolder<*>, channel: ProgramGuideChannel?) {
             if (channel == null) {
                 channelNameView.visibility = View.GONE
                 channelLogoView.visibility = View.GONE
@@ -158,6 +170,10 @@ internal class ProgramGuideRowAdapter(
             }
             channelNameView.text = channel.name
             channelNameView.visibility = View.GONE
+
+            channelLogoView.setOnClickListener {
+                programGuideHolder.onChannelLogoClicked(channel)
+            }
         }
 
         internal fun updateLayout() {

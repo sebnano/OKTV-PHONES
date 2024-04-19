@@ -39,7 +39,8 @@ class ProgramGuideManager<T> {
 
         private const val DAY_STARTS_AT_HOUR = 5
         private const val DAY_ENDS_NEXT_DAY_AT_HOUR = 6
-
+        var LANGUAGE_CODE = ""
+//        var startTimeMillis = System.currentTimeMillis()
         private val TAG: String = ProgramGuideManager::class.java.name
     }
 
@@ -76,7 +77,6 @@ class ProgramGuideManager<T> {
         }
         setTimeRange(startUtcMillis, endUtcMillis)
     }
-
 
     @Suppress("ConvertTwoComparisonsToRangeCheck")
     private fun updateChannelsTimeRange(selectedDate: LocalDate, timeZone: ZoneId) {
@@ -434,6 +434,7 @@ class ProgramGuideManager<T> {
                             mutatedList = list.toMutableList()
                         }
                         val index = list.indexOf(possibleMatch)
+//                        Log.e("updateProgram:-", "" +program.displayTitle)
                         replacement = possibleMatch.copy(
                             isClickable = program.isClickable,
                             displayTitle = program.displayTitle,

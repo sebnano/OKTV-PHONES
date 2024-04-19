@@ -24,7 +24,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <com.app.oktv.custom.widget.CustomImageView
+        <com.oktv_mobile.custom.widget.CustomImageView
             android:id="@+id/ivBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
-        <com.app.oktv.custom.widget.CustomTextViewBold
+        <com.oktv_mobile.custom.widget.CustomTextViewBold
             style="@style/text_14_bold"
             android:id="@+id/tvVideoTitle"
             android:layout_width="0dp"
@@ -49,28 +49,18 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clStar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
             android:layout_marginEnd="@dimen/_4sdp"
             app:layout_constraintTop_toTopOf="@+id/ivBack"
             app:layout_constraintBottom_toBottomOf="@+id/ivBack"
             app:layout_constraintEnd_toStartOf="@+id/clVolume">
 
-            <com.app.oktv.custom.widget.CustomImageView
+            <com.oktv_mobile.custom.widget.CustomImageView
                 android:id="@+id/ivFillStar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_fill_star_blue"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
-            <com.app.oktv.custom.widget.CustomImageView
-                android:id="@+id/ivBlackStar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_blank_star_blue"
+                android:background="@drawable/ic_blank_star_blue"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +76,7 @@
            app:layout_constraintBottom_toBottomOf="@+id/ivBack"
            app:layout_constraintEnd_toEndOf="parent">
 
-           <com.app.oktv.custom.widget.CustomImageView
+           <com.oktv_mobile.custom.widget.CustomImageView
                android:id="@+id/ivVolumeDown"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
@@ -97,7 +87,7 @@
                app:layout_constraintStart_toStartOf="parent"
                app:layout_constraintEnd_toEndOf="parent"/>
 
-           <com.app.oktv.custom.widget.CustomImageView
+           <com.oktv_mobile.custom.widget.CustomImageView
                android:id="@+id/ivVolumeUp"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
@@ -128,7 +118,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <com.app.oktv.custom.widget.CustomTextViewSemiBold
+            <com.oktv_mobile.custom.widget.CustomTextViewSemiBold
                 style="@style/text_20_bold"
                 android:id="@+id/tvTitle"
                 android:layout_width="0dp"
@@ -165,7 +155,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <com.app.oktv.custom.widget.CustomTextViewMedium
+        <com.oktv_mobile.custom.widget.CustomTextViewMedium
             style="@style/text_20_bold"
             android:id="@+id/tvChannelName"
             android:layout_width="wrap_content"
@@ -200,7 +190,7 @@
             app:layout_constraintTop_toTopOf="@+id/tvChannelName"
             app:layout_constraintBottom_toBottomOf="@+id/tvChannelName"/>
 
-        <com.app.oktv.custom.widget.CustomImageView
+        <com.oktv_mobile.custom.widget.CustomImageView
             android:id="@+id/ivLogo"
             android:layout_width="@dimen/_58sdp"
             android:layout_height="@dimen/_25sdp"

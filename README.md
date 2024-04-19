@@ -1,3 +1,0 @@
-# OKTV-PHONES
-
-Android code

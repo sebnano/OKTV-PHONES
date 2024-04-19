@@ -5,14 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activity.LoginActivity"
-    android:background="@drawable/splesh">
+    android:background="@drawable/splesh"
+    android:id="@+id/clMain">
 
-    <com.app.oktv.custom.widget.CustomTextViewBold
+    <com.oktv_mobile.custom.widget.CustomImageView
+        android:id="@+id/ivMainBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <com.oktv_mobile.custom.widget.CustomTextViewBold
         style="@style/text_20_bold"
         android:id="@+id/tvLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login"
+        tools:text="@string/login"
         android:textColor="@color/yellow_59"
         android:layout_marginTop="@dimen/_28sdp"
         app:layout_constraintTop_toTopOf="parent"
@@ -28,18 +39,18 @@
         app:layout_constraintBottom_toBottomOf="@id/tvLogin"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <com.app.oktv.custom.widget.CustomTextViewMedium
+        <com.oktv_mobile.custom.widget.CustomTextViewMedium
             style="@style/text_14_lite"
             android:id="@+id/tvLanguageName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/yellow_59"
-            android:text="@string/english"
+            tools:text="@string/english"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
-        <com.app.oktv.custom.widget.CustomImageView
+        <com.oktv_mobile.custom.widget.CustomImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_4sdp"
@@ -68,7 +79,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <com.app.oktv.custom.widget.CustomImageView
+            <com.oktv_mobile.custom.widget.CustomImageView
                 android:id="@+id/ivUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -88,12 +99,12 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/ivUserName"/>
             
-            <com.app.oktv.custom.widget.CustomEditText
+            <com.oktv_mobile.custom.widget.CustomEditText
                 style="@style/text_16_lite"
                 android:id="@+id/etUserName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/enter_user_name"
+                tools:hint="@string/enter_user_name"
                 android:paddingTop="@dimen/_2sdp"
                 android:inputType="textEmailAddress"
                 android:background="@drawable/bg_corner_8dp_white"
@@ -118,7 +129,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <com.app.oktv.custom.widget.CustomImageView
+            <com.oktv_mobile.custom.widget.CustomImageView
                 android:id="@+id/ivPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -138,12 +149,12 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/ivPassword"/>
 
-            <com.app.oktv.custom.widget.CustomEditText
+            <com.oktv_mobile.custom.widget.CustomEditText
                 style="@style/text_16_lite"
                 android:id="@+id/etPassword"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/password"
+                tools:hint="@string/password"
                 android:paddingTop="@dimen/_2sdp"
                 android:inputType="textPassword"
                 android:background="@drawable/bg_corner_8dp_white"
@@ -155,7 +166,7 @@
                 app:layout_constraintStart_toEndOf="@+id/view2"
                 app:layout_constraintEnd_toStartOf="@+id/ivEye"/>
 
-            <com.app.oktv.custom.widget.CustomImageView
+            <com.oktv_mobile.custom.widget.CustomImageView
                 android:id="@+id/ivEye"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -167,13 +178,13 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.app.oktv.custom.widget.CustomTextViewMedium
+        <com.oktv_mobile.custom.widget.CustomTextViewMedium
             style="@style/text_16_lite"
             android:id="@+id/btnLogin"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_corner_8dp_blue"
-            android:text="@string/login"
+            tools:text="@string/login"
             android:gravity="center"
             android:layout_marginTop="@dimen/_16sdp"
             android:paddingVertical="@dimen/_8sdp"
@@ -182,13 +193,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <com.app.oktv.custom.widget.CustomTextViewMedium
+        <com.oktv_mobile.custom.widget.CustomTextViewMedium
             style="@style/text_16_lite"
             android:id="@+id/btnLeave"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_corner_8dp_yellow"
-            android:text="@string/leave"
+            tools:text="@string/leave"
             android:gravity="center"
             android:layout_marginTop="@dimen/_16sdp"
             android:paddingVertical="@dimen/_8sdp"

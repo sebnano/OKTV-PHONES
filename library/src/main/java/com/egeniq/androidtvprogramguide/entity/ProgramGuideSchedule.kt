@@ -16,8 +16,9 @@
 
 package com.egeniq.androidtvprogramguide.entity
 
+import android.util.Log
+import com.egeniq.androidtvprogramguide.ProgramGuideManager
 import com.egeniq.androidtvprogramguide.util.ProgramGuideUtil
-import org.threeten.bp.Instant
 
 /**
  * This class represents a programme in the EPG.
@@ -64,21 +65,29 @@ data class ProgramGuideSchedule<T>(
 
         fun <T> createScheduleWithProgram(
             id: Long,
-            startsAt: Instant,
-            endsAt: Instant,
+            startsAt: Long,
+            endsAt: Long,
             isClickable: Boolean,
             displayTitle: String?,
             program: T
         ): ProgramGuideSchedule<T> {
             return ProgramGuideSchedule(
                 id,
-                startsAt.toEpochMilli(),
-                endsAt.toEpochMilli(),
-                OriginalTimes(startsAt.toEpochMilli(), endsAt.toEpochMilli()),
+                startsAt,
+                endsAt,
+                OriginalTimes(startsAt, endsAt),
                 isClickable,
                 displayTitle,
                 program
             )
+        }
+
+        fun setStartTime(timeInMillis: Long) {
+//            ProgramGuideManager.startTimeMillis = timeInMillis
+        }
+
+        fun setLanguageCode(code: String) {
+            ProgramGuideManager.LANGUAGE_CODE = code
         }
     }
 

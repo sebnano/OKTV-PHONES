@@ -17,19 +17,23 @@
 package com.egeniq.androidtvprogramguide
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.Resources
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.TextView
-import android.widget.ViewAnimator
+import android.widget.*
 import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -55,6 +59,7 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.temporal.ChronoUnit
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -88,10 +93,10 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
     protected val FILTER_DATE_FORMATTER: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE
 
     // Config values, override in subclass if necessary
-    protected open val DISPLAY_LOCALE = Locale("en", "US")
+    protected open val DISPLAY_LOCALE = Locale("en-gb", "US")
     protected open val DISPLAY_TIMEZONE: ZoneId = ZoneOffset.UTC
-    protected open val SELECTABLE_DAYS_IN_PAST = 7
-    protected open val SELECTABLE_DAYS_IN_FUTURE = 7
+    protected open val SELECTABLE_DAYS_IN_PAST = 0
+    protected open val SELECTABLE_DAYS_IN_FUTURE = 2
     protected open val USE_HUMAN_DATES = true
 
     @Suppress("LeakingThis")
@@ -142,7 +147,6 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
     private var focusEnabledScrollListener: RecyclerView.OnScrollListener? = null
 
     protected var currentDate: LocalDate = FixedLocalDateTime.now().toLocalDate()
-        private set
 
     private val progressUpdateHandler: Handler = Handler(Looper.getMainLooper())
     private val progressUpdateRunnable: Runnable = object : Runnable {
@@ -154,6 +158,11 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
             progressUpdateHandler.postDelayed(this, TIME_INDICATOR_UPDATE_INTERVAL)
         }
     }
+
+    private var all = ""
+    private var today = ""
+    private var  tomorrow = ""
+    private var  selectDayTitle = ""
 
     sealed class State {
         object Loading : State()
@@ -171,13 +180,16 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
      * The user has selected a date, and wants to see the program guide for the date supplied in the parameter.
      * When loading data, you can use the setState(State) method to toggle between the different views.
      */
-    abstract fun requestingProgramGuideFor(localDate: LocalDate)
+    abstract fun requestingProgramGuideFor(localDate: LocalDate, type : Int)
 
     /**
      * Denotes that the fragment wants to refresh its data, now only used at initialization.
      * You should probably request the program guide for the current date at this point.
      */
     abstract fun requestRefresh()
+
+
+    abstract fun requestRefreshEPG()
 
     /**
      *  Called when the user has selected a schedule from the grid.
@@ -191,6 +203,7 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
      */
     abstract fun onScheduleClicked(programGuideSchedule: ProgramGuideSchedule<T>)
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -200,8 +213,11 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
         // structure, you are not obligated to use the name we use in the library.
         val view =
             inflater.inflate(OVERRIDE_LAYOUT_ID ?: R.layout.programguide_fragment, container, false)
+        view.overScrollMode = 0
         setupFilters(view)
         setupComponents(view)
+
+
         return view
     }
 
@@ -213,53 +229,67 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
     private fun setupFilters(view: View) {
         // Day filter
         val now = FixedZonedDateTime.now().withZoneSameInstant(DISPLAY_TIMEZONE)
-        val dayFilterOptions =
-            (-SELECTABLE_DAYS_IN_PAST until SELECTABLE_DAYS_IN_FUTURE).map { dayIndex ->
-                val indexLong = dayIndex.toLong()
-                when {
-                    USE_HUMAN_DATES && dayIndex == -1 -> FilterOption(
-                        getString(R.string.programguide_day_yesterday),
-                        FILTER_DATE_FORMATTER.format(now.plusDays(indexLong)),
-                        false
-                    )
-                    USE_HUMAN_DATES && dayIndex == 0 -> FilterOption(
-                        getString(R.string.programguide_day_today),
+        val dayFilterOptions = (-SELECTABLE_DAYS_IN_PAST until SELECTABLE_DAYS_IN_FUTURE).map { dayIndex ->
+            val indexLong = dayIndex.toLong()
+            val currentDate1 = Date()
+            val calendar = Calendar.getInstance()
+            calendar.time = currentDate1
+            calendar.add(Calendar.DAY_OF_YEAR, dayIndex) // Add one day
+
+            val formattedDate = if (ProgramGuideManager.LANGUAGE_CODE == "es") {
+               formatDate(calendar,"es")
+            } else {
+                formatDate(calendar,"en")
+            }
+//            dayIndex += 1
+             Log.e("languageGetData", "--->$dayIndex")
+            Log.e("languageGetData", "--->$dayIndex")
+            if (ProgramGuideManager.LANGUAGE_CODE == "es") {
+                all = "Todos"
+                today = "Hoy"
+                tomorrow = "Mañana"
+                selectDayTitle = "Seleccione el día deseado"
+            } else {
+                all = "All"
+                today = "Today"
+                tomorrow = "Tomorrow"
+                selectDayTitle = "Select The Desired Day"
+            }
+
+
+            when {
+                USE_HUMAN_DATES && dayIndex == 0 -> FilterOption(
+                    today,
+                    FILTER_DATE_FORMATTER.format(now.plusDays(indexLong)),
+                    true
+                )
+                    else -> FilterOption(
+                        tomorrow,
                         FILTER_DATE_FORMATTER.format(now.plusDays(indexLong)),
                         true
-                    )
-                    USE_HUMAN_DATES && dayIndex == 1 -> FilterOption(
-                        getString(R.string.programguide_day_tomorrow),
-                        FILTER_DATE_FORMATTER.format(now.plusDays(indexLong)),
-                        false
-                    )
-                    else -> FilterOption(
-                        DATE_WITH_DAY_FORMATTER.format(now.plusDays(indexLong)),
-                        FILTER_DATE_FORMATTER.format(now.plusDays(indexLong)),
-                        false
-                    )
-                }
+                )
             }
-        val dayFilter = view.findViewById<View>(R.id.programguide_day_filter)
-        dayFilter.findViewById<TextView>(R.id.programguide_filter_title).text = dayFilterOptions[currentlySelectedFilterIndex].displayTitle
-        dayFilter.setOnClickListener { filterView ->
-            AlertDialog.Builder(filterView.context)
-                .setTitle(R.string.programguide_day_selector_title)
-                .setSingleChoiceItems(
-                    dayFilterOptions.map { it.displayTitle }.toTypedArray(),
-                    currentlySelectedFilterIndex
-                ) { dialogInterface, position ->
-                    currentlySelectedFilterIndex = position
-                    dialogInterface.dismiss()
+        }
+//        val dayFilter = view.findViewById<View>(R.id.programguide_day_filter)
+//        dayFilter.findViewById<TextView>(R.id.programguide_filter_title).text = dayFilterOptions[currentlySelectedFilterIndex].displayTitle
+//        dayFilter.setOnClickListener { filterView ->
+//            AlertDialog.Builder(filterView.context)
+//                .setTitle(selectDayTitle)
+//                .setSingleChoiceItems(dayFilterOptions.map { it.displayTitle }.toTypedArray(), currentlySelectedFilterIndex) { dialogInterface, position ->
+//                    currentlySelectedFilterIndex = position
+//                    Log.e("FilterPosition:-  " , "" + position)
+//                    dialogInterface.dismiss()
+//                    dayFilter.findViewById<TextView>(R.id.programguide_filter_title).text = dayFilterOptions[currentlySelectedFilterIndex].displayTitle
+//                    didScrollToBestProgramme = false
+//                    setJumpToLiveButtonVisible(false)
+//                    currentDate = LocalDate.parse(dayFilterOptions[position].value, FILTER_DATE_FORMATTER)
+//                    requestingProgramGuideFor(currentDate, currentlySelectedFilterIndex)
+//                }.show()
+//        }
 
-                    dayFilter.findViewById<TextView>(R.id.programguide_filter_title).text =
-                        dayFilterOptions[currentlySelectedFilterIndex].displayTitle
-                    didScrollToBestProgramme = false
-                    setJumpToLiveButtonVisible(false)
-                    currentDate =
-                        LocalDate.parse(dayFilterOptions[position].value, FILTER_DATE_FORMATTER)
-                    requestingProgramGuideFor(currentDate)
-                }
-                .show()
+        val ivRefresh = view.findViewById<View>(R.id.ivRefresh)
+        ivRefresh.setOnClickListener {
+            requestRefreshEPG()
         }
 
         // Time of day filter
@@ -294,6 +324,13 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
         }
     }
 
+   private fun formatDate(calendar: Calendar,languageCode : String): String {
+        val localDate = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH))
+        val formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale(languageCode))
+        return localDate.format(formatter)
+    }
+
+
     /**
      * The 'jump to live' button visibility can be set here.
      * It should only be visible if the date is today, and the current scroll range does not show
@@ -324,6 +361,7 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
     /**
      * Sets up all the components to be used by the fragment.
      */
+    @RequiresApi(Build.VERSION_CODES.M)
     @Suppress("ObjectLiteralToLambda", "DEPRECATION")
     @SuppressLint("RestrictedApi")
     private fun setupComponents(view: View) {
@@ -353,6 +391,16 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
                 timelineStartMillis + viewportMillis
             )
         }
+
+//        view.findViewById<ScrollView>(R.id.horizontalScrollView)?.let {
+//            it.setOnScrollChangeListener { _, scrollX, _, _, _ ->
+//                // Here you can perform actions based on the scroll position
+//                // For example, you can check if the user has scrolled to the end
+//                Log.i("HorizontalScroll", "scroll x - ${scrollX}")
+//                onHorizontalScrolled(scrollX ?: 0)
+//            }
+//        }
+
         view.findViewById<ProgramGuideGridView<T>>(R.id.programguide_grid)?.let {
             it.initialize(programGuideManager)
             // Set the feature flags
@@ -365,7 +413,7 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
                 it.resources.getDimensionPixelOffset(R.dimen.programguide_channel_column_width)
             it.childFocusListener = this
             it.scheduleSelectionListener = this
-            it.focusScrollStrategy = BaseGridView.FOCUS_SCROLL_ALIGNED
+            it.focusScrollStrategy = BaseGridView.FOCUS_SCROLL_PAGE
             it.windowAlignmentOffset = selectionRow * rowHeight
             it.windowAlignmentOffsetPercent = BaseGridView.WINDOW_ALIGN_OFFSET_PERCENT_DISABLED
             it.itemAlignmentOffset = 0
@@ -373,12 +421,18 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
 
             val adapter = ProgramGuideRowAdapter(it.context, this)
             it.adapter = adapter
+
+//            it.setOnScrollChangeListener { _, scrollX, _, _, _ ->
+//                Log.i("HorizontalScroll", "scroll x - ${scrollX}")
+//                onHorizontalScrolled(scrollX ?: 0)
+//            }
         }
         programGuideManager.listeners.add(this)
         currentDateView?.alpha = 0f
         timeRow.let { timelineRow ->
             val timelineAdapter = ProgramGuideTimeListAdapter(resources, DISPLAY_TIMEZONE)
             if (timelineStartMillis > 0) {
+                timelineAdapter.update(timelineStartMillis, timelineAdjustmentPixels)
                 timelineAdapter.update(timelineStartMillis, timelineAdjustmentPixels)
             }
             timelineRow.adapter = timelineAdapter
@@ -387,6 +441,7 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
                 resources.getInteger(R.integer.programguide_max_recycled_view_pool_time_row_item)
             )
         }
+
 //        val jumpToLive = view.findViewById<View>(R.id.programguide_jump_to_live)!!
 //        jumpToLive.setOnClickListener { autoScrollToBestProgramme() }
     }
@@ -560,7 +615,9 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
         newChannelEntries: Map<String, List<ProgramGuideSchedule<T>>>,
         selectedDate: LocalDate
     ) {
-        programGuideManager.setData(newChannels, newChannelEntries, selectedDate, DISPLAY_TIMEZONE)
+        val now = System.currentTimeMillis()
+        val zoneId = ZoneId.ofOffset("", ZoneOffset.ofTotalSeconds(TimeZone.getDefault().getOffset(now) / 1_000))
+        programGuideManager.setData(newChannels, newChannelEntries, selectedDate, zoneId)
     }
 
     override fun onTimeRangeUpdated() {
@@ -701,6 +758,7 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
     /**
      * Changes the state, used for animated and handling visibility of some screen components.
      */
+    @SuppressLint("ResourceAsColor")
     fun setState(state: State) {
         currentState = state
         val alpha: Float
@@ -715,6 +773,7 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
                     errorMessage?.setText(R.string.programguide_error_fetching_content)
                 } else {
                     errorMessage?.text = state.errorMessage
+                    errorMessage?.setTextColor(Color.WHITE)
                 }
                 contentAnimator?.displayedChild = 1
             }
@@ -760,7 +819,27 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
      * The gridview calls this method on the fragment when the focus changes on one of their child changes.
      */
     override fun onSelectionChanged(schedule: ProgramGuideSchedule<T>?) {
-        setSelectedSchedule(schedule)
+//        setSelectedSchedule(schedule)
+
+    }
+
+    override fun onRowHorizontalScrolled(dx: Int) {
+
+        Log.i("HorizontalScroll", "scroll from child gridview - ${dx}")
+//        onHorizontalScrolled(dx)
+
+        programGuideGrid.post {
+            programGuideGrid.smoothScrollBy(dx, 0)
+//            val dxPixels = dx * 50.0
+//            programGuideGrid.smoothScrollToPosition(dx)
+//            programGuideGrid.smoothScrollByOffset(dxPixels)
+//            programGuideGrid.scrollBy(dx, 0)
+        }
+        timeRow?.post {
+            timeRow?.smoothScrollBy(dx, 0)
+//            timeRow?.scrollBy(dx, 0)
+//            timeRow?.smoothScrollToPosition(dx)
+        }
     }
 
     /**
@@ -768,7 +847,7 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
      */
     override fun onScheduleClickedInternal(schedule: ProgramGuideSchedule<T>) {
         ProgramGuideUtil.lastClickedSchedule = schedule
-        onScheduleClicked(schedule)
+//        onScheduleClicked(schedule)
     }
 
     /**
@@ -810,17 +889,12 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
             if (currentProgram == null) {
                 Log.w(TAG, "Can't scroll to current program because schedule not found.")
             } else {
-                Log.i(
-                    TAG,
-                    "Scrolling to ${currentProgram.displayTitle}, started at ${currentProgram.startsAtMillis}"
-                )
+                Log.i(TAG, "Scrolling to ${currentProgram.displayTitle}, started at ${currentProgram.startsAtMillis}")
                 if (!programGuideManager.jumpTo(currentProgram.startsAtMillis)) {
                     programGuideGrid.focusCurrentProgram()
                 }
             }
         } else {
-            // The day is not today.
-            // Go to the selected time of day.
             val timelineDate =
                 Instant.ofEpochMilli((programGuideManager.getStartTime() + programGuideManager.getEndTime()) / 2)
                     .atZone(DISPLAY_TIMEZONE)
@@ -829,9 +903,7 @@ abstract class ProgramGuideFragment<T> : Fragment(), ProgramGuideManager.Listene
                 1 -> MORNING_UNTIL_HOUR
                 else -> AFTERNOON_UNTIL_HOUR
             }
-            val scrollToMillis =
-                timelineDate.withHour(scrollToHour).truncatedTo(ChronoUnit.HOURS)
-                    .toEpochSecond() * 1000
+            val scrollToMillis = timelineDate.withHour(scrollToHour).truncatedTo(ChronoUnit.HOURS).toEpochSecond() * 1000
             if (programGuideManager.jumpTo(scrollToMillis)) {
                 programGuideGrid.requestFocus()
             }

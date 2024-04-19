@@ -17,7 +17,8 @@
 
 <resources>
     <dimen name="programguide_table_width_per_hour">300dp</dimen>
-    <dimen name="programguide_program_row_height">32dp</dimen>
+<!--    <dimen name="programguide_program_row_height">32dp</dimen>-->
+    <dimen name="programguide_program_row_height">80dp</dimen>
     <dimen name="programguide_program_row_height_with_empty_space">36dp</dimen>
     <dimen name="programguide_minimum_item_width_sticking_out_behind_channel_column">74dp</dimen>
     <dimen name="programguide_item_padding">6dp</dimen>
@@ -27,6 +28,7 @@
     <dimen name="programguide_time_row_height">36dp</dimen>
     <dimen name="programguide_channel_column_width">160dp</dimen>
     <dimen name="programguide_page_left_padding">32dp</dimen>
+    <dimen name="programguide_page_right_padding">20dp</dimen>
     <dimen name="programguide_current_time_indicator_top_height">4dp</dimen>
     <dimen name="programguide_filter_spacing">8dp</dimen>
     <dimen name="programguide_page_top_margin_menu_visible">8dp</dimen>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "643900528744",
+    "project_id": "oktv-1e375",
+    "storage_bucket": "oktv-1e375.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:643900528744:android:af005fd19de1ce9f2a83dd",
+        "android_client_info": {
+          "package_name": "com.oktv_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAr6AMJQxBn-bxkHO-xmTlB5kw2ASpAFb8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
