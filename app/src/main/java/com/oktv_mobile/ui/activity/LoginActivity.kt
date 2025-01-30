@@ -62,6 +62,8 @@ class LoginActivity : CustomAppCompatActivity(), LanguageCallBack {
     private var enterUserName = ""
     private var notValidMessage = ""
 
+    private var currentPosition = -1
+    private var selectedOperator: UserOperatorModel? = null
 
     private var databaseHandler: DBHelper? = null
 
@@ -136,20 +138,11 @@ class LoginActivity : CustomAppCompatActivity(), LanguageCallBack {
         }
 
         homeVM.observeDevices().observe(this) {
-            if (it.size < operatorList[0].maxDevices.toInt()) {
-                homeVM.addNewConnectedDevice(java.util.HashMap<String, Any>().apply {
-                    put("type", listOf(mapOf("target_id" to "dispositivos_por_usuarios")))
-                    put("title", listOf(mapOf("value" to "Dispositivo del usuario")))
-                    put("field_id_opera", listOf(mapOf("value" to operatorList[0].operador)))
-                    put("field_dispositivo_ip", listOf(mapOf("value" to MyPreferences.getFromPreferences(this@LoginActivity,
-                        Constant.IPADDRESS))))
-                    put("field_dispositivo_mac", listOf(mapOf("value" to MyPreferences.getFromPreferences(this@LoginActivity,
-                        Constant.MACADD))))
-                    put("field_dispositivo_nombre", listOf(mapOf("value" to Build.MANUFACTURER + " " + Build.MODEL)))
-                })
+            if (it.size < selectedOperator!!.maxDevices.toInt()) {
+                changeConnectedDevice()
             } else {
-                operatorList.removeAt(0)
-                operatorData()
+                currentPosition += 1
+                checkOperatorAvailability()
             }
         }
 
@@ -162,16 +155,6 @@ class LoginActivity : CustomAppCompatActivity(), LanguageCallBack {
                 hideLoadingDialog()
                showToast(notValidMessage)
             }
-        }
-
-        homeVM.observeAddConnectedDevice().observe(this) {
-            MyPreferences.saveStringInPreference(this, Constant.OPERATORID, operatorList[0].operador)
-            MyPreferences.saveStringInPreference(this, Constant.OPERATORNAME, operatorList[0].operatorName)
-            MyPreferences.saveStringInPreference(this, Constant.MaxDevicesConn, operatorList[0].maxDevices)
-            MyPreferences.saveStringInPreference(this, Constant.NODE_ID, it.nid[0].value.toString())
-
-            hideLoadingDialog()
-            startDownloadData()
         }
 
         loginVM.observeAuth().observe(this) { it ->
@@ -190,11 +173,24 @@ class LoginActivity : CustomAppCompatActivity(), LanguageCallBack {
             }
         }
 
+
+        homeVM.observeAddConnectedDevice().observe(this) {
+            Log.i("ADDED_OPERATOR_ID_NAME", "${selectedOperator!!.operador}-${selectedOperator!!.operatorName}")
+            MyPreferences.saveStringInPreference(this, Constant.OPERATORID, selectedOperator!!.operador)
+            MyPreferences.saveStringInPreference(this, Constant.OPERATORNAME, selectedOperator!!.operatorName)
+            MyPreferences.saveStringInPreference(this, Constant.MaxDevicesConn, selectedOperator!!.maxDevices)
+            MyPreferences.saveStringInPreference(this, Constant.NODE_ID, it.nid[0].value.toString())
+
+            hideLoadingDialog()
+            startDownloadData()
+        }
+
         loginVM.observeOperator().observe(this) {
             if (it != null) {
                 operatorList.clear()
                 operatorList.addAll(it)
-                operatorData()
+                currentPosition = 0
+                checkOperatorAvailability()
             } else {
                 hideLoadingDialog()
             }
@@ -343,36 +339,42 @@ class LoginActivity : CustomAppCompatActivity(), LanguageCallBack {
         }
     }
 
-    private fun operatorData() {
-        if (operatorList.isNotEmpty()) {
-            if (operatorList[0].maxDevices.isNotEmpty()) {
+    private fun checkOperatorAvailability() {
+        if (currentPosition < operatorList.count()) {
+            val maxDevice = operatorList[currentPosition].maxDevices
+            if (maxDevice.isNotEmpty()) {
+                selectedOperator = operatorList[currentPosition]
                 homeVM.userDeviceList(
                     MyPreferences.getFromPreferences(this, Constant.USERID),
-                    operatorList[0].operador
+                    selectedOperator!!.operador
                 )
             } else {
-                emptyMaxDeviceOperator = operatorList[0]
-                operatorList.removeAt(0)
-                operatorData()
+                currentPosition += 1
+                checkOperatorAvailability()
             }
         } else {
-            if (emptyMaxDeviceOperator != null) {
-                operatorList.add(emptyMaxDeviceOperator!!)
-                homeVM.addNewConnectedDevice(java.util.HashMap<String, Any>().apply {
-                    put("type", listOf(mapOf("target_id" to "dispositivos_por_usuarios")))
-                    put("title", listOf(mapOf("value" to "Dispositivo del usuario")))
-                    put("field_id_opera", listOf(mapOf("value" to operatorList[0].operador)))
-                    put("field_dispositivo_ip", listOf(mapOf("value" to MyPreferences.getFromPreferences(this@LoginActivity,
-                        Constant.IPADDRESS))))
-                    put("field_dispositivo_mac", listOf(mapOf("value" to MyPreferences.getFromPreferences(this@LoginActivity,
-                        Constant.MACADD))))
-                    put("field_dispositivo_nombre", listOf(mapOf("value" to Build.MANUFACTURER + " " + Build.MODEL)))
-                })
-            } else {
+            val arrDefaultOperator = operatorList.filter { it.maxDevices.isEmpty() }
+            if (arrDefaultOperator.isEmpty()) {
                 hideLoadingDialog()
-                startDownloadData()
+                showToast("No Default Device Available")
+            } else {
+                selectedOperator = arrDefaultOperator[0]
+                changeConnectedDevice()
             }
         }
+    }
+
+    private fun changeConnectedDevice() {
+        homeVM.addNewConnectedDevice(java.util.HashMap<String, Any>().apply {
+            put("type", listOf(mapOf("target_id" to "dispositivos_por_usuarios")))
+            put("title", listOf(mapOf("value" to "Dispositivo del usuario")))
+            put("field_id_opera", listOf(mapOf("value" to selectedOperator!!.operador)))
+            put("field_dispositivo_ip", listOf(mapOf("value" to MyPreferences.getFromPreferences(this@LoginActivity,
+                Constant.IPADDRESS))))
+            put("field_dispositivo_mac", listOf(mapOf("value" to MyPreferences.getFromPreferences(this@LoginActivity,
+                Constant.MACADD))))
+            put("field_dispositivo_nombre", listOf(mapOf("value" to Build.MANUFACTURER + " " + Build.MODEL)))
+        })
     }
 
     /**This function used to call Login API**/
@@ -384,6 +386,14 @@ class LoginActivity : CustomAppCompatActivity(), LanguageCallBack {
     }
 
     private fun startDownloadData() {
+        homeVM.observeDevices().removeObservers(this)
+        loginVM.observeConfiguration().removeObservers(this)
+        loginVM.observeLanguageString().removeObservers(this)
+        loginVM.observeLogin().removeObservers(this)
+        homeVM.observeAddConnectedDevice().removeObservers(this)
+        loginVM.observeAuth().removeObservers(this)
+        loginVM.observeOperator().removeObservers(this)
+        loginVM.observeLanguageName().removeObservers(this)
         DownloadManager.getOperator()
     }
 
@@ -442,14 +452,6 @@ class LoginActivity : CustomAppCompatActivity(), LanguageCallBack {
 
     override fun onDestroy() {
         super.onDestroy()
-        loginVM.observeConfiguration().removeObservers(this)
-        loginVM.observeLanguageString().removeObservers(this)
-        homeVM.observeDevices().removeObservers(this)
-        loginVM.observeLogin().removeObservers(this)
-        homeVM.observeAddConnectedDevice().removeObservers(this)
-        loginVM.observeAuth().removeObservers(this)
-        loginVM.observeOperator().removeObservers(this)
-        loginVM.observeLanguageName().removeObservers(this)
         DownloadManager.data.removeObservers(this)
     }
 }

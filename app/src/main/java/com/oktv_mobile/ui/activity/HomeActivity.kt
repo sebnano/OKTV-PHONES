@@ -1,7 +1,6 @@
 package com.oktv_mobile.ui.activity
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -9,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.text.Html
-import android.text.format.DateUtils
 import android.util.Log
 import android.view.View
 import android.widget.PopupWindow
@@ -17,40 +15,18 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.oktv_mobile.R
 import com.oktv_mobile.custom.classes.CustomAppCompatActivity
 import com.oktv_mobile.ui.viewmodel.HomeVM
 import com.oktv_mobile.ui.viewmodel.LoginVM
 import com.egeniq.androidtvprogramguide.entity.ProgramGuideSchedule
-import com.oktv_mobile.ui.adapter.ChannelCategorySecondAdapter
 import com.oktv_mobile.ui.adapter.HomeBannerAdapter
 import com.oktv_mobile.ui.fragment.*
-import com.oktv_mobile.ui.model.homemodel.CategoryChannelModel
-import com.oktv_mobile.ui.model.homemodel.ChannelProgramModel
-import com.oktv_mobile.ui.model.homemodel.ChannelXMLModel
 import com.oktv_mobile.ui.model.homemodel.HomeBannerModel
 import com.oktv_mobile.utils.*
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.raw_manubar_list.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okio.IOException
-import org.w3c.dom.Element
-import org.w3c.dom.Node
-import org.xml.sax.SAXException
-import java.io.*
-import java.net.URL
-import java.text.SimpleDateFormat
 import java.util.*
-import javax.xml.parsers.DocumentBuilderFactory
-import javax.xml.parsers.ParserConfigurationException
 
 class HomeActivity : CustomAppCompatActivity() {
 
@@ -91,6 +67,8 @@ class HomeActivity : CustomAppCompatActivity() {
         vpBanner.currentItem = vpBanner.currentItem + 1
     }
 
+    private lateinit var homeVM : HomeVM
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,6 +86,8 @@ class HomeActivity : CustomAppCompatActivity() {
         db = databaseHandler?.writableDatabase
         handler = Handler()
         loginVM = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[LoginVM::class.java]
+        homeVM = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[HomeVM::class.java]
+
         homeFragment = HomeFragment()
         favouriteFragment = FavouriteFragment()
         guideFragment = EpgFragment()
@@ -390,7 +370,7 @@ class HomeActivity : CustomAppCompatActivity() {
         Constant.EPG_URL = "https://portal.ok-television.com/sites/default/files/android-tv-cdn/perfectfile.xml"
 //        downloadXml()
 
-
+        getDevices()
     }
 
     /** this function used for convert html text to common text **/
@@ -423,6 +403,26 @@ class HomeActivity : CustomAppCompatActivity() {
         val decor = window.decorView
         if (decor?.parent != null) {
             super.onDestroy()
+        }
+    }
+
+    private fun getDevices() {
+        Log.i("ADDED_OPERATOR_DEVICE_ID_NAME", "${MyPreferences.getFromPreferences(
+            this, Constant.OPERATORID)}-${MyPreferences.getFromPreferences(
+            this, Constant.OPERATORNAME)}")
+        homeVM.userDeviceList(
+            MyPreferences.getFromPreferences(this, Constant.USERID),
+            MyPreferences.getFromPreferences(this, Constant.OPERATORID))
+        homeVM.observeDevices().observe(this) {
+            Log.i("DownloadManager", "observeDevices called")
+            if (it != null) {
+                Log.i("ADDED_OPERATOR_DEVICE", it.toString())
+                db?.execSQL("DELETE FROM ${DBHelper.DEVICES_TABLE}")
+                for (item in it) {
+                    databaseHandler!!.addDevices(db, item.operatorId, item.pais_dispositivos, item.nodeId, item.deviceMac, item.deviceTitle, item.deviceIp)
+                }
+                homeVM.observeDevices().removeObservers(this)
+            }
         }
     }
 }

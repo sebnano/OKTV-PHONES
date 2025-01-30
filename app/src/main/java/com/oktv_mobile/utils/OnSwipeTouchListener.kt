@@ -1,9 +1,11 @@
 package com.oktv_mobile.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import kotlin.math.abs
 
 open class OnSwipeTouchListener (context: Context) : View.OnTouchListener {
     private val gestureDetector: GestureDetector
@@ -12,6 +14,7 @@ open class OnSwipeTouchListener (context: Context) : View.OnTouchListener {
         gestureDetector = GestureDetector(context, GestureListener())
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
         return gestureDetector.onTouchEvent(motionEvent)
     }
@@ -37,12 +40,17 @@ open class OnSwipeTouchListener (context: Context) : View.OnTouchListener {
             super.onLongPress(e)
         }
 
-        override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+        override fun onFling(
+            p0: MotionEvent?,
+            e1: MotionEvent,
+            velocityX: Float,
+            velocityY: Float
+        ): Boolean {
             try {
-                val diffY = e2.y - e1.y
-                val diffX = e2.x - e1.x
-                if (Math.abs(diffX) > Math.abs(diffY)) {
-                    if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                val diffY = e1.y - p0!!.y
+                val diffX = e1.x - p0.x
+                if (abs(diffX) > abs(diffY)) {
+                    if (abs(diffX) > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                         if (diffX > 0) {
                             onSwipeRight()
                         } else {

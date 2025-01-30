@@ -3,10 +3,12 @@ package com.oktv_mobile.ui.fragment
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.database.sqlite.SQLiteDatabase
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
@@ -75,7 +77,6 @@ class SettingFragment : Fragment(), LanguageCallBack, UpdateDevice {
     private var isCallBack = false
     private lateinit var viewDialog: View
     private lateinit var loadingDialog: LoadingDialog
-    private var isLoading = false
 
     /** This Variable For ViewModel **/
     private lateinit var homeVM : HomeVM
@@ -92,10 +93,14 @@ class SettingFragment : Fragment(), LanguageCallBack, UpdateDevice {
 
     private var isDeviceAdded = false
     private var databaseHandler: DBHelper? = null
+    var db: SQLiteDatabase? = null
+
+    var isFromRefreshedDevices = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         databaseHandler = DBHelper(requireContext(), null)
+        db = databaseHandler?.writableDatabase
         arguments?.let {
         }
     }
@@ -145,8 +150,6 @@ class SettingFragment : Fragment(), LanguageCallBack, UpdateDevice {
         operator_Id = MyPreferences.getFromPreferences(requireContext(), Constant.OPERATORID)
         operator_name = MyPreferences.getFromPreferences(requireContext(), Constant.OPERATORNAME)
 
-        MyPreferences.saveStringInPreference(requireContext(), Constant.OPERATORID, operator_Id)
-        MyPreferences.saveStringInPreference(requireContext(), Constant.OPERATORNAME, operator_name)
         operatorsAdapter = OperatorsAdapter(operatorList,this, operator_Id, selectedOperatorTitle)
         operatorsAdapter.operaterId(operator_Id, operator_name)
 
@@ -155,7 +158,9 @@ class SettingFragment : Fragment(), LanguageCallBack, UpdateDevice {
         rvOperator.adapter = operatorsAdapter
         operatorsAdapter.notifyDataSetChanged()
 
+        isFromRefreshedDevices = true
         getOperators()
+        getRefreshDevices()
         getDevices()
         getLanguageName()
 
@@ -255,11 +260,9 @@ class SettingFragment : Fragment(), LanguageCallBack, UpdateDevice {
     }
 
     private fun refreshAllData() {
-        Log.e("SettingFragment", "Refresh All Data")
-        loginVM.getLanguageNameList()
-
         val db = DBHelper(requireContext(), null)
         db.truncateAllTables()
+        showLoadingDialog()
         DownloadManager.getOperator()
     }
 
@@ -317,7 +320,9 @@ class SettingFragment : Fragment(), LanguageCallBack, UpdateDevice {
         val cursor = (context as HomeActivity).db?.rawQuery("SELECT * FROM ${DBHelper.DEVICES_TABLE}", null)
         if (cursor != null) {
             deviceList.clear()
+            devicesAdapter.notifyDataSetChanged()
             while (cursor.moveToNext()) {
+                Log.i("Device-Node", cursor.getColumnIndex(DBHelper.deviceColumn_node_id).toString())
                 deviceList.add(
                     UserDeviceModel(
                         cursor.getString(cursor.getColumnIndex(DBHelper.deviceColumn_field_dispositivo_nombre)),
@@ -342,64 +347,70 @@ class SettingFragment : Fragment(), LanguageCallBack, UpdateDevice {
     }
 
     private fun observeData() {
-        DownloadManager.data.observe(viewLifecycleOwner) { data ->
-            Log.e("SettingFragment", "DownloadManager Data")
-            if (data == "showLoader") {
+        DownloadManager.data.observe(viewLifecycleOwner) { it ->
+            if (it == "showLoader") {
                 showLoadingDialog()
-            } else if (data == "hideLoader") {
+            } else if (it == "hideLoader") {
                 hideLoadingDialog()
                 getOperators()
                 getDevices()
             }
         }
 
-        homeVM.observeDevices().observe(viewLifecycleOwner) {
-            Log.e("SettingFragment", "observeDevices")
+        homeVM.observeDevices1().observe(viewLifecycleOwner) {
             if (it != null) {
-                if (maxDevices.isEmpty()) {
-                    deleteDevice()
-                } else if (it.size < maxDevices.toInt()) {
-                    deleteDevice()
+                if (isFromRefreshedDevices) {
+                    isFromRefreshedDevices = false
+                    if (it != null) {
+                        db?.execSQL("DELETE FROM ${DBHelper.DEVICES_TABLE}")
+                        for (item in it) {
+                            databaseHandler!!.addDevices(db, item.operatorId, item.pais_dispositivos, item.nodeId, item.deviceMac, item.deviceTitle, item.deviceIp)
+                        }
+                        getDevices()
+                    }
                 } else {
-                    (context as HomeActivity).showToast(noSpaceDevice)
-                    hideLoadingDialog()
+                    if (maxDevices.isEmpty()) {
+                        deleteDevice()
+                    } else if (it.size < maxDevices.toInt()) {
+                        deleteDevice()
+                    } else {
+                        maxDevices = ""
+                        operator_Id = ""
+                        operator_name = ""
+                        (context as HomeActivity).showToast(noSpaceDevice)
+                        hideLoadingDialog()
+                    }
                 }
             }
         }
 
-//        loginVM.observeLanguageName().observe(viewLifecycleOwner) {
-//            if (it != null) {
-//                languageList.clear()
-//                languageList.addAll(it)
-//                languageAdapter.notifyDataSetChanged()
-//                if (MyPreferences.getFromPreferences(requireContext(), Constant.languageCode).isNotEmpty() && languageList.size > 0) {
-//                    val languageName = languageList.filter {
-//                        it.key == MyPreferences.getFromPreferences(requireContext(), Constant.languageCode)
-//                    }
-//
-//                    if (languageName.isNotEmpty()) {
-//                        val defaultLanguageName = languageName.first()
-//                        tvLanguageName.text = defaultLanguageName.value
-//                    }
-//                } else {
-//                    tvLanguageName.text = getString(R.string.english)
-//                }
-////                if (isLoading) {
-////                    hideLoadingDialog()
-////                }
-//            }
-//        }
+        homeVM.observeAddConnectedDevice1().observe(viewLifecycleOwner) {
+            MyPreferences.saveStringInPreference(requireContext(), Constant.OPERATORID, operator_Id)
+            MyPreferences.saveStringInPreference(requireContext(), Constant.OPERATORNAME, operator_name)
+            MyPreferences.saveStringInPreference(requireContext(), Constant.MaxDevicesConn, maxDevices)
+            MyPreferences.saveStringInPreference(requireContext(), Constant.NODE_ID, it.nid[0].value.toString())
 
-//        loginVM.observeLanguageString().observe(viewLifecycleOwner) {
-//            if (it != null) {
-//               SharedPreferencesHelper.saveArrayList(requireContext(),it)
-//                getString()
-//                if (isCallBack) {
-//                    startActivity(Intent(requireContext(), HomeActivity::class.java))
-//                }
-//            }
-////            hideLoadingDialog()
-//        }
+            hideLoadingDialog()
+            if (isDeviceAdded) {
+                isDeviceAdded = false
+                getRefreshDevices()
+                refreshAllData()
+            }
+        }
+
+        homeVM.deleteDeviceStatus.observe(viewLifecycleOwner) {
+            isDeviceAdded = true
+            homeVM.addNewConnectedDevice1(HashMap<String, Any>().apply {
+                put("type", listOf(mapOf("target_id" to "dispositivos_por_usuarios")))
+                put("title", listOf(mapOf("value" to "Dispositivo del usuario")))
+                put("field_id_opera", listOf(mapOf("value" to operator_Id)))
+                put("field_dispositivo_ip", listOf(mapOf("value" to MyPreferences.getFromPreferences(requireContext(),
+                    Constant.IPADDRESS))))
+                put("field_dispositivo_mac", listOf(mapOf("value" to MyPreferences.getFromPreferences(requireContext(),
+                    Constant.MACADD))))
+                put("field_dispositivo_nombre", listOf(mapOf("value" to Build.MANUFACTURER + " " + Build.MODEL)))
+            })
+        }
 
         DownloadManager.langKeywordsData.observe(viewLifecycleOwner) { data ->
             if (data == "showLoader") {
@@ -410,43 +421,6 @@ class SettingFragment : Fragment(), LanguageCallBack, UpdateDevice {
                 if (isCallBack) {
                     startActivity(Intent(requireContext(), HomeActivity::class.java))
                 }
-            }
-        }
-    }
-
-    private fun addDeviceObserver() {
-        homeVM.observeDeleteDevice().observe(viewLifecycleOwner) {
-            Log.e("SettingFragment", "Add Device Called")
-            addDeviceListObserver()
-            isDeviceAdded = true
-            homeVM.addNewConnectedDevice(java.util.HashMap<String, Any>().apply {
-                put("type", listOf(mapOf("target_id" to "dispositivos_por_usuarios")))
-                put("title", listOf(mapOf("value" to "Dispositivo del usuario")))
-                put("field_id_opera", listOf(mapOf("value" to MyPreferences.getFromPreferences(requireContext(),
-                    Constant.OPERATORID))))
-                put("field_dispositivo_ip", listOf(mapOf("value" to MyPreferences.getFromPreferences(requireContext(),
-                    Constant.IPADDRESS))))
-                put("field_dispositivo_mac", listOf(mapOf("value" to MyPreferences.getFromPreferences(requireContext(),
-                    Constant.MACADD))))
-                put("field_dispositivo_nombre", listOf(mapOf("value" to Build.MANUFACTURER + " " + Build.MODEL)))
-            })
-            homeVM.observeDeleteDevice().removeObservers(viewLifecycleOwner)
-        }
-    }
-
-    private fun addDeviceListObserver() {
-        homeVM.observeAddConnectedDevice().observe(viewLifecycleOwner) {
-            Log.e("SettingFragment", "observeAddConnectedDevice")
-            MyPreferences.saveStringInPreference(requireContext(), Constant.OPERATORID, operator_Id)
-            MyPreferences.saveStringInPreference(requireContext(), Constant.OPERATORNAME, operator_name)
-            MyPreferences.saveStringInPreference(requireContext(), Constant.MaxDevicesConn, maxDevices)
-            MyPreferences.saveStringInPreference(requireContext(), Constant.NODE_ID, it.nid[0].value.toString())
-//            homeVM.observeAddConnectedDevice().removeObservers(viewLifecycleOwner)
-
-            hideLoadingDialog()
-            if (isDeviceAdded) {
-                isDeviceAdded = false
-                refreshAllData()
             }
         }
     }
@@ -532,15 +506,13 @@ class SettingFragment : Fragment(), LanguageCallBack, UpdateDevice {
     }
 
     override fun onDestroyView() {
-        Log.e("SettingFragment", "Destroy View Clicked Before")
-        homeVM.observeAddConnectedDevice().removeObservers(viewLifecycleOwner)
-        homeVM.observeDeleteDevice().removeObservers(viewLifecycleOwner)
-        homeVM.observeDevices().removeObservers(viewLifecycleOwner)
+        homeVM.observeAddConnectedDevice1().removeObservers(viewLifecycleOwner)
+        homeVM.deleteDeviceStatus.removeObservers(viewLifecycleOwner)
+        homeVM.observeDevices1().removeObservers(viewLifecycleOwner)
         loginVM.observeLanguageName().removeObservers(viewLifecycleOwner)
         loginVM.observeLanguageString().removeObservers(viewLifecycleOwner)
         DownloadManager.data.removeObservers(viewLifecycleOwner)
         super.onDestroyView()
-        Log.e("SettingFragment", "Destroy View Clicked After")
 
     }
 
@@ -563,27 +535,26 @@ class SettingFragment : Fragment(), LanguageCallBack, UpdateDevice {
     }
 
     private fun deleteDevice() {
-        Log.e("Device-ID",""+ MyPreferences.getFromPreferences(requireContext(), Constant.NODE_ID))
         val nodeId = MyPreferences.getFromPreferences(requireContext(), Constant.NODE_ID)
         if (nodeId != "0") {
-            addDeviceObserver()
-            homeVM.deleteUserDevice(
-                MyPreferences.getFromPreferences(
-                    requireContext(),
-                    Constant.NODE_ID
-                )
-            )
+            homeVM.deleteUserDevice1(nodeId)
         }
     }
 
     override fun deviceData(operatorId: String, maxDevice: String, operatorName: String) {
-        operator_Id = operatorId
-        operator_name = operatorName
-        maxDevices = maxDevice
         if (operatorId != MyPreferences.getFromPreferences(requireContext(),Constant.OPERATORID)) {
-            homeVM.userDeviceList(MyPreferences.getFromPreferences(requireContext(), Constant.USERID),operatorId)
+            operator_Id = operatorId
+            operator_name = operatorName
+            maxDevices = maxDevice
+            homeVM.userDeviceList1(MyPreferences.getFromPreferences(requireContext(), Constant.USERID), operatorId)
             showLoadingDialog()
-            MyPreferences.saveStringInPreference(requireContext(),Constant.OPERATORID,operatorId)
         }
+    }
+
+    private fun getRefreshDevices() {
+        homeVM.userDeviceList1(
+            MyPreferences.getFromPreferences(requireContext(), Constant.USERID),
+            MyPreferences.getFromPreferences(requireContext(), Constant.OPERATORID))
+        isFromRefreshedDevices = true
     }
 }

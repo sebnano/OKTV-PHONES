@@ -7,6 +7,8 @@ import com.oktv_mobile.retrofit.MyResponse
 import com.oktv_mobile.retrofit.MyRetrofit
 import com.oktv_mobile.ui.`interface`.HomeApiCall
 import com.oktv_mobile.ui.model.homemodel.*
+import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 class HomeRepo {
@@ -250,6 +252,33 @@ class HomeRepo {
         return data
     }
 
+//    fun deleteDevices(nodeId: String): MutableLiveData<MyResponse<Unit>> {
+//        val data = MutableLiveData<MyResponse<Unit>>()
+//        val retrofitService = MyRetrofit.getRetrofitService(HomeApiCall::class.java)
+//        val call = retrofitService.deleteDevice(nodeId)
+//
+//        call.enqueue(object : MyCallback<Unit> {
+//            override fun success(response: Response<Unit>) {
+//                data.postValue(MyResponse.success(response.body()!!))
+//            }
+//
+//            override fun serverError() {
+//                data.postValue(MyResponse.authError(""))
+//            }
+//
+//            override fun networkError() {
+//                data.postValue(MyResponse.internetError())
+//            }
+//
+//            override fun authError() {
+//                data.postValue(MyResponse.authError(""))
+//            }
+//
+//        })
+//
+//        return data
+//    }
+
     fun deleteDevices(nodeId: String): MutableLiveData<MyResponse<Unit>> {
         val data = MutableLiveData<MyResponse<Unit>>()
         val retrofitService = MyRetrofit.getRetrofitService(HomeApiCall::class.java)
@@ -275,5 +304,49 @@ class HomeRepo {
         })
 
         return data
+    }
+
+
+    fun deleteDevice1(nodeId: String, callback: MyCallback<Unit>) {
+        val data = MutableLiveData<MyResponse<Unit>>()
+        val retrofitService = MyRetrofit.getRetrofitService(HomeApiCall::class.java)
+        val call = retrofitService.deleteDevice1(nodeId)
+
+        call.enqueue(object : Callback<Unit> {
+            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                try {
+                    when (response.code()) {
+                        200, 201 -> {
+                            Log.d("API_RESPONSE", "Success: ${response.code()}")
+                            callback.success(response)
+                        }
+                        204 -> {
+                            Log.d("API_RESPONSE", "No Content: ${response.code()}")
+                            callback.success(response) // Pass response without body
+                        }
+                        401 -> {
+                            Log.e("API_RESPONSE", "Unauthorized: ${response.errorBody()?.string()}")
+                            callback.authError()
+                        }
+                        403 -> {
+                            Log.e("API_RESPONSE", "Forbidden")
+                            callback.authError()
+                        }
+                        else -> {
+                            Log.e("API_RESPONSE", "Server Error: ${response.errorBody()?.string()}")
+                            callback.serverError()
+                        }
+                    }
+                } catch (e: Exception) {
+                    Log.e("API_RESPONSE", "Exception: ${e.message}")
+                    callback.serverError()
+                }
+            }
+
+            override fun onFailure(call: Call<Unit>, t: Throwable) {
+                Log.e("API_RESPONSE", "Failure: ${t.message}")
+                callback.networkError()
+            }
+        })
     }
 }

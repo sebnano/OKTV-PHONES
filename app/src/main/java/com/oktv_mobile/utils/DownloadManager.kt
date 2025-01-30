@@ -43,17 +43,11 @@ object DownloadManager {
 
         loginVM = ViewModelProvider(viewModelStoreOwner, ViewModelProvider.NewInstanceFactory())[LoginVM::class.java]
         homeVM = ViewModelProvider(viewModelStoreOwner, ViewModelProvider.NewInstanceFactory())[HomeVM::class.java]
-
-//        databaseHandler!!.truncateDataFromTable(DBHelper.BANNERS_TABLE)
-//        databaseHandler!!.truncateDataFromTable(DBHelper.OPERATOR_TABLE)
-//        databaseHandler!!.truncateDataFromTable(DBHelper.DEVICES_TABLE)
-//        databaseHandler!!.truncateDataFromTable(DBHelper.CATEGORIES_TABLE)
-//        databaseHandler!!.truncateDataFromTable(DBHelper.CHANNELS_TABLE)
     }
 
     fun getOperator() {
         db = databaseHandler!!.writableDatabase
-        _data.postValue("showLoader")
+        _data.value = "showLoader"
         if (databaseHandler!!.getRowCounts(db, DBHelper.OPERATOR_TABLE) > 0) {
             getDevices()
         } else {
@@ -76,12 +70,14 @@ object DownloadManager {
         if (databaseHandler!!.getRowCounts(db, DBHelper.DEVICES_TABLE) > 0) {
             getBanners()
         } else {
+            Log.i("ADDED_OPERATOR_DEVICE_ID_NAME", "${MyPreferences.getFromPreferences(applicationContext, Constant.OPERATORID)}-${MyPreferences.getFromPreferences(applicationContext, Constant.OPERATORNAME)}")
             homeVM.userDeviceList(
                 MyPreferences.getFromPreferences(applicationContext, Constant.USERID),
                 MyPreferences.getFromPreferences(applicationContext, Constant.OPERATORID))
             homeVM.observeDevices().observe(lifecycleOwner) {
                 Log.i("DownloadManager", "observeDevices called")
                 if (it != null) {
+                    Log.i("ADDED_OPERATOR_DEVICE", it.toString())
                     db?.execSQL("DELETE FROM ${DBHelper.DEVICES_TABLE}")
                     for (item in it) {
                         databaseHandler!!.addDevices(db, item.operatorId, item.pais_dispositivos, item.nodeId, item.deviceMac, item.deviceTitle, item.deviceIp)
@@ -118,6 +114,7 @@ object DownloadManager {
         } else {
             homeVM.channelCategory(MyPreferences.getFromPreferences(applicationContext, Constant.OPERATORID))
             homeVM.observeChannelCategory().observe(lifecycleOwner) {
+                Log.i("DownloadManager-Category", it.toString())
                 Log.i("DownloadManager", "observeChannelCategory called")
                 if (it != null) {
                     db?.execSQL("DELETE FROM ${DBHelper.CATEGORIES_TABLE}")
@@ -190,7 +187,7 @@ object DownloadManager {
                 }
                 homeVM.observeFavourite().removeObservers(lifecycleOwner)
                 db?.close()
-                _data.postValue("hideLoader")
+                _data.value = "hideLoader"
             }
         }
     }

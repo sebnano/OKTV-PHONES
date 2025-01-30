@@ -136,6 +136,7 @@ class HomeFragment : Fragment(), ChannelItemCallback {
             try {
                 (context as HomeActivity).showLoadingDialog()
                 val data = fetchDataFromDatabase()
+                Log.i("Category-data", data.toString())
                 updateUI(data)
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -154,7 +155,10 @@ class HomeFragment : Fragment(), ChannelItemCallback {
                         cursor.getString(cursor.getColumnIndex(DBHelper.categoriesColumn_category))
 
                     val allChannelList = ArrayList<ChannelDataModel>()
-                    val cursor1 = (context as HomeActivity).db?.rawQuery("SELECT * FROM ${DBHelper.CHANNELS_TABLE} where ${DBHelper.channelColumn_field_channel_category} = '$categoryName'", null)
+//                    val cursor1 = (context as HomeActivity).db?.rawQuery("SELECT * FROM ${DBHelper.CHANNELS_TABLE} where ${DBHelper.channelColumn_field_channel_category} = '$categoryName'", null)
+                    val query = "SELECT * FROM ${DBHelper.CHANNELS_TABLE} where ${DBHelper.channelColumn_field_channel_category} LIKE '%$categoryName%'"
+                    Log.i("Channel-category", query)
+                    val cursor1 = (context as HomeActivity).db?.rawQuery(query, null)
                     if (cursor1 != null) {
                         while (cursor1.moveToNext()) {
                             allChannelList.add(
